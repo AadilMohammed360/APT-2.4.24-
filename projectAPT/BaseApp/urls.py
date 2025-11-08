@@ -35,7 +35,7 @@ urlpatterns = [
     path('apct/passwordupdate', views.apctpasswordupdate, name="apctpasswordupdate"),
     path('apct/profileupdate', views.apctprofileupdate, name="apctprofileupdate"),
     path('apct/testimonial', views.apcttestimonial, name="apcttestimonial"),
-    # path('update_hirestatus/', views.update_hirestatus, name="update_hirestatus"),
+    path('update_hirestatus/', views.update_hirestatus, name="update_hirestatus"),
     path('apct/jobapply', views.jobapply, name="jobapply"),
 
     #render staff pages

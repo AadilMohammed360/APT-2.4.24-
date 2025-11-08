@@ -45,13 +45,6 @@ def profileupdate(request):
 def testimonial(request):
     return render(request, 'testimonial.html')
 
-from .models import Application
-
-def viewapplicants(request):
-    # fetch all applications, select related applicant and vacancy for efficiency
-    applications = Application.objects.select_related('applicant', 'vacancy').all()
-    return render(request, 'staff/viewapplicants.html', {'applications': applications})
-
 
 # secondary pages (sorted for applicant)
 def apctwelcome(request):
@@ -102,6 +95,7 @@ def apcttestimonial(request):
 
 def staffwelcome(request):
     return render(request, 'staff/welcome.html')
+
 def staffvacancies(request):
     vacancydata = Vacancy.objects.all()    
     return render(request, 'staff/vacancies.html',{'vacancydata':vacancydata,})
@@ -186,9 +180,7 @@ def stafffilterCV(request):
     return render(request, 'staff/filter applicants.html',{'apctdata':apctdata,'searchbykey':searchbykey,})
     # return render(request, 'staff/filter applicants.html',{'apctdata':apctdata,'searchbykey':searchbykey,'searchbydegree':searchbydegree,})
 
-def staffviewapplicants(request):
-    apctdata = Applicant.objects.all()
-    return render(request, 'staff/view applicants.html',{'apctdata':apctdata,})
+
 
 def staffpage404(request):
     return render(request, 'staff/404.html')
@@ -324,27 +316,6 @@ def apct_register(request):
                        log_id=login)
         data.save()        
     return redirect('index')
-
-from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseBadRequest
-from .models import Application
-
-def updateapplicationstatus(request):
-    if request.method == 'POST':
-        application_id = request.POST.get('application_id')
-        new_status = request.POST.get('status')
-        notes = request.POST.get('notes', '')
-        
-        if not application_id or not application_id.isdigit():
-            return HttpResponseBadRequest("Invalid application id")
-        
-        application = get_object_or_404(Application, id=int(application_id))
-        application.status = new_status
-        if notes:
-            application.notes = notes
-        application.save()
-    
-    return redirect('viewapplicants')
 
 
 #applicant update
@@ -526,3 +497,49 @@ def applyaction(request):
     
     return redirect('apctjoblist')
 
+# Update staff view to change application status
+from .models import Application
+
+def viewapplicants(request):
+    return render(request, 'staff/view applicants.html')
+
+def staffviewapplicants(request):
+    # Fetch all Application objects, with related Applicant and Vacancy
+    applications = Application.objects.select_related('applicant', 'vacancy').all()
+    return render(request, 'staff/view applicants.html', {'applications': applications})
+
+
+def update_hirestatus(request):
+        if request.method == 'GET':
+            # Get the data from the query parameters
+            hiringstatus = request.GET['hire_status']
+            apctid = request.GET['apctid']
+            print(hiringstatus)
+            print(apctid)
+
+            # Process the data (e.g., save it to a database)
+            # Your processing logic here...
+
+            apctdata = Applicant.objects.get(id=apctid)
+            apctdata.hirestatus = hiringstatus
+            apctdata.save()
+
+
+        apctdata = Applicant.objects.all()
+        return render(request, 'staff/view applicants.html',{'apctdata':apctdata,})
+
+def updateapplicationstatus(request):
+    if 'log_id' not in request.session:
+        return redirect('login')
+    
+    application_id = request.POST.get('application_id')
+    new_status = request.POST.get('status')
+    notes = request.POST.get('notes', '')
+    
+    application = Application.objects.get(id=application_id)
+    application.status = new_status
+    if notes:
+        application.notes = notes
+    application.save()
+    
+    return redirect('staffviewapplicants')
