@@ -1,0 +1,125 @@
+{% extends "applicant/apctlayout.html" %}
+{% load static %}
+{% block header %}
+        <!-- Header End -->
+        <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Contact</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+{% endblock %}
+{% block content %}
+
+
+
+        <!-- Contact Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Your Account</h1>
+                <div class="row g-4 justify-content-center text-center">
+                    <div class="col-md-12 wow fadeInUp" data-wow-delay="0.1s">
+                        <h2><i class="bi bi-person-circle display-1 "></i></h2>
+                    </div>
+                    <div class="col-md-6 text-start">
+                        <div class="wow fadeInUp" data-wow-delay="0.5s">
+                            
+                            <!-- form with CV Upload -->
+                            <form method="post" action='{% url "apctaddextradata" %}' id="formaddextradata">
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    <div class="col-5 text-end">                                        
+                                        <label for="name">Your Name: </label>
+                                    </div>
+                                    <div class="col-7 text-start">
+                                        <span class="ms-5">{{applicantprofile.applicantname}}</span>
+                                    </div>
+
+                                    <div class="col-5 text-end">
+                                        <label for="email">Your Email: </label>
+                                    </div>
+                                    <div class="col-7 text-start">
+                                        <span class="ms-5">{{applicantprofile.email}}</span>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <label for="subject">Your Contact: </label>
+                                    </div>
+                                    <div class="col-7 text-start">
+                                        <span class="ms-5">{{applicantprofile.contact}}</span>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <label for="subject">Your Address: </label>
+                                    </div>
+                                    <div class="col-7 text-start">
+                                        <span class="ms-5">{{applicantprofile.address}}</span>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <label for="subject">Username: </label>
+                                    </div>
+                                    <div class="col-7 text-start">
+                                        <span class="ms-5">{{applicantprofile.username}}</span>
+                                    </div>
+                                    <div class="col-12 text-center mt-5 pb-3">
+                                        <h3 class="">Additional details u need to fill out</h3>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <label for="subject">Highest Qualification: </label>
+                                    </div>
+                                    <div class="col-5 text-start">
+                                        <input type="text" class=" form-control ms-2" name="degree"></input>
+                                    </div>
+                                    <div class="col-5 text-end">
+                                        <label for="subject">Job Experience(optional): </label>
+                                    </div>
+                                    <div class="col-5 text-start">
+                                        <input type="text" class=" form-control ms-2" name="xp"></input>
+                                    </div>
+                                    <div class="col-10 text-end mt-5 ">
+                                        <button class="btn btn-primary w-75 py-2" type="submit">Add Info</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <form action='{% url "uploadCV" %}' method="post" id="CVuploader" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="col-12 d-flex justify-content-center wow fadeInUp" data-wow-delay="0.6s">
+                            <div class="col-6 mt-5">
+                                <h6>If you havent uploaded your resume, upload it here so we can
+                                    find and match you with the right job
+                                </h6>
+                                <div class="input-group">
+                                    <label for="subject" hidden>Upload Resume/CV</label>
+                                    <input type="file" class="form-control mt-4" id="coverletter" name="CV">
+                            </div>
+                            <div class="col-12 mt-3">
+                                <button class="btn btn-primary w-100 py-3" type="submit">Upload CV</button>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+                        cvuploader = document.getElementById('CVuploader');
+                        coverletter = document.getElementById('coverletter');
+                        cvuploader.addEventListener('submit', function(event){
+                            event.preventDefault();
+                            if(!coverletter.value || coverletter.value == ''){
+                                alert("you did not select a cv to upload, upload failed");
+                            }
+                            else {
+                                cvuploader.submit();
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!-- Contact End -->
+{% endblock %}

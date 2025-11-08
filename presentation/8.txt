@@ -1,0 +1,132 @@
+
+### Abstract (Slide 1)
+
+**Applicant Tracking System**
+
+The Applicant Tracking System is a comprehensive software solution designed to streamline and automate the hiring process for organizations. It facilitates efficient management of job postings, applicant tracking, resume parsing, interview scheduling, and candidate evaluation. The system enables HR departments to create and publish vacancies, receive applications, and filter candidates based on predefined criteria. Through integrated communication tools, recruiters can interact with applicants, schedule interviews, and provide feedback.
+
+**Technologies Proposed:**
+- **Backend:** Python Django
+- **Frontend:** Html, Css, Js
+- **Platform:** Windows 10 and above
+
+***
+
+
+### Introduction (Slide 2)
+
+**Applicant Tracking System – CHAPTER-1 INTRODUCTION**
+
+Applicant Tracking System (RMS) and software include a suite of applications to automatically identify, screen, interview, and evaluate job candidates. RMS systems can also be used by schools to recruit students and by nonprofits to recruit donors or manage volunteers.
+
+ATS is often called by similar names, including “e-recruitment,” “online recruitment,” and “talent acquisition” (TA) software. RMS is most often sold as a service now (so-called “software as a service,” or SaaS), although it is still sold both as standalone software and as a service on private networks, in addition to being available on the cloud.
+
+Beyond the functionalities of the software itself to manage attracting and hiring new employees, RMS can generate reports and other analytics to assess the effectiveness of recruitment campaigns. They can manage and track interactions with job boards and employment agencies, as well as track recruiter activities, employee retention rates, and other HR-related information. Findings can establish performance benchmarks and determine where best to find the most suitable and qualified candidates.
+
+ATS is typically integrated into the organization’s human resources management systems (HRM) as well as the enterprise’s larger information management systems. While the scope of large global enterprises usually dictates either purchasing the standalone software or contracting with a private network, smaller companies can take advantage of free Web-based services. These free services make their money offering ancillary third-party services (i.e., posting jobs to LinkedIn or Monster) as well as “priority support” service contracts.
+
+***
+
+
+
+**2.1 EXISTING SYSTEM (Slide 3)**
+
+Presently the system includes a manual process through files, folders, and binders. Eventually, the job seeker has to find the company which is offering the required profile. Then check the eligibility of the post or do a search on eligibility basis by visiting the various company which he knows of.
+
+**Limitations**
+- The obsolete way to deal with the association of representatives stayed paper based, followed by meetings at some geological position. This technique included an unlimited measure of time in foundation, travel and testing. The distinct strategy included the resulting stages:
+  - Singular division decides business necessities,
+  - Approval of essential existing
+  - Determination of some of CV’s to peruse, store adjust
+  - pick perfect applicant
+  - Affirmation or restart (incase applicant decay arrangement.) This strategy, dependent on the amount of entries, may have brought about a decent competitor not being
+
+***
+
+### Proposed System & Advantages (Slide 4)
+
+**2.2 PROPOSED SYSTEM**
+
+Proposed systems bridge all issues related with the existing system. It provides customized modules appropriate for an academic institution. The software is developed in open source technologies. As the development is done in PHP there are no hidden costs in the process. In the backend the systems use MySQL database server.
+
+**Advantages**
+
+- Applicant Tracking System allows recruiters to find top industry talent
+- Access from Anywhere - The software can be accessed from anywhere and at any time.
+- A record of everything can be kept due to its easy accessibility.
+- Using ATS optimizes the entire recruiting process
+- Applicant Tracking Software Improves communication channels
+- ATS Helps enhance talent sourcing strategies
+- Applicant Tracking System augments recruitment marketing efforts
+
+***
+
+### Functionality Design (Slide 5)
+
+**Proposed system mainly focuses on the below given modules**
+
+
+#### Module Implementation Overview
+
+- **Login Module:** User authentication with role-based access control
+- **Registration Module:** Separate interfaces for employers and job seekers
+- **Post Requisition:** Employers can post jobs with specifications and criteria
+- **Job Search:** Job seekers can search and filter based on skills and experience
+- **Application Process:** Candidates can apply for selected positions
+
+
+Module Description (Slide 6):
+1. Admin Module: This module provides administrative functionalities, allowing system administrators to manage user roles, oversee recruitment processes, and generate reports on application statistics. Administrators can create, update, and delete job postings, as well as monitor the overall performance of the recruitment system.
+
+2. Staff Module (Recruiters): The staff module is tailored for recruiters, enabling them to view and manage job applications. Recruiters can review applicant profiles, schedule interviews, and communicate with candidates through the platform. This module aims to facilitate collaboration among recruitment teams and streamline the selection process.
+
+3. User Module (Applicants): This module serves the applicants, allowing them to create profiles, apply for job vacancies, and track the status of their applications. Users can upload resumes, provide personal information, and receive notifications regarding their application status. The user-friendly interface ensures a smooth experience for applicants throughout the recruitment journey.
+
+
+
+List of functions under Modules (Slide 7):
+Applicant-scoped views:
+1.	Register account
+2.	View account setting
+3.	Update account setting
+4.	View job vacancies
+5.	Add additional resume details
+6.	Update password
+7.	Upload resume
+8.	Search job listings
+9.	Receive recruitment status notification
+10.	Apply for vacancy
+11.	View about page
+________________________________________
+
+Recruiter-scoped views:
+1.	Register account
+2.	View account setting
+3.	Change account setting
+4.	Set job vacancies
+5.	Edit job vacancies
+6.	Filter Resume by qualification
+7.	View applicant
+8.	Hire applicants
+9.	Change recruitment status
+10.	Set job description
+11.	Change job description
+12.	staffpasswordupdate
+13.	staffprofileupdate
+
+________________________________________
+
+Admin-scoped views:
+1.	Add Recruiter
+2.	Remove Recruiter
+3.	Enable/Disable Recruiter Account
+4.	View Recruiter List
+5.	View job vacancies
+6.	Set site contact page
+7.	Edit contact page
+8.	Edit testimonials
+9.	Edit About Page
+10.	Change password
+
+Level 1 DFD (Slide 8):
+images of DFD

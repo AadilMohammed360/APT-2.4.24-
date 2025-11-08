@@ -1,0 +1,166 @@
+{% extends "admin/adminlayout.html" %}
+{% load static %}
+{% block header %}
+        <!-- Header End -->
+        <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Manage</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Manage</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+{% endblock %}
+{% block contact %}
+        <!-- Contact Start -->
+        <div class="container-xxl py-5" style="min-height:75vh">
+            <div class="container">
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Manage Staff</h1>
+                <div class="row g-4">
+                    <div class="col-12 text-end">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addingmodel">
+                    Add
+                  </button>
+                
+                  <!-- Modal -->
+                  <div class="modal fade" id="addingmodel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog model-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Staff</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method='post' action='{% url "registerstaff" %}' id="staffform">
+                                {% csrf_token %}
+                                <input type="text" class="form-control" id="role" name="role" value="staff" hidden>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="staffname-error" class="form-control" id="staffname" name="staffname" placeholder="Your Name">
+                                            <label for="name">Your Name</label>
+                                            <div id="staffname-error"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="email" aria-describedby="email-error" class="form-control" id="email" name="email" placeholder="Your Email">
+                                            <label for="email">Your Email</label>
+                                            <div id="email-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="contact-error" class="form-control" id="contact" name="contact" placeholder="Your Contact">
+                                            <label for="contact">Your Contact</label>
+                                            <div id="contact-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="company-error" class="form-control" id="company" name="company" placeholder="workplace name">
+                                            <label for="company">companyname</label>
+                                            <div id="company-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="username-error" class="form-control" id="username" name="username" placeholder="Username">
+                                            <label for="username">Username</label>
+                                            <div id="username-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="password-error" class="form-control" id="password" name="password" placeholder="Password">
+                                            <label for="password">Password</label>
+                                            <div id="password-error"></div>
+                                            
+                                        </div>
+                                    </div>                                
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary" onclick="validate()">Add Staff</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="wow fadeInUp" data-wow-delay="0.5s">
+                            <table class="table align-middle mb-0 bg-white mx-auto">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th>Sl no</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>Workplace</th>
+                                    <th>Username</th>
+                                    <th>Password</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for staff in staffdata  %}
+                                    
+                                    <tr>
+    
+                                        <td><p class="fw-bold mb-1"> {{forloop.counter}} </p></td>
+                                        <td>
+                                            <p class="fw-bold mb-1">{{staff.staffname}}</p>
+                                        </td>
+                                        <td>
+                                        <p class="fw-normal mb-1"> {{staff.contact}} </p>
+                                        </td>
+                                        <td><p class="text-muted mb-0"> {{staff.workplace}} </p></td>
+                                        <td><p class="text-muted mb-0"> {{staff.username}} </p></td>
+                                        <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletingmodel{{forloop.counter}}">Remove</button></td>                                    
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deletingmodel{{forloop.counter}}" tabindex="-1" aria-labelledby="deletingmodelLabel{{forloop.counter}}" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="deletingmodelLabel{{forloop.counter}}">Remove Staff</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body text-start">
+                                                Are you sure you want to remove this user {{staff.log_id.id}} ? 
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a 
+                                                href='{% url "removestaff"%}?delid={{staff.log_id.id}}'
+                                                class="btn btn-danger"
+                                                >
+                                                Remove</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Contact End -->
+{% endblock %}

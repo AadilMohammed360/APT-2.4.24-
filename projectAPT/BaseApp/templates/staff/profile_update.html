@@ -1,0 +1,137 @@
+{% extends "staff/stafflayout.html" %}
+{% load static %}
+{% block content %}
+        <!-- Header End -->
+        <div class="container-xxl py-5 bg-dark page-header mb-5">
+            <div class="container my-5 pt-5 pb-4">
+                <h1 class="display-3 text-white mb-3 animated slideInDown">Contact</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-uppercase">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Contact</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <!-- Header End -->
+
+
+        <!-- Contact Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Update Profile Here</h1>
+                <div class="row g-4">
+                    <div class="col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                        <img  alt="" style="height: 75%;" src={% static "img/privacy.gif" %} >
+                    </div>
+                    <div class="col-md-6">
+                        <div class="wow fadeInUp" data-wow-delay="0.5s">
+                            
+                            <form method='post' action='{% url "staff_update" %}' id="staffform">
+                                {% csrf_token %}
+                                <input type="text" name="role" value="staff" hidden>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="staffname-error" class="form-control" id="staffname" name="staffname" placeholder="Your Name">
+                                            <label for="name">Your Name</label>
+                                            <div id="staffname-error"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="email" aria-describedby="email-error" class="form-control" id="email" name="email" placeholder="Your Email">
+                                            <label for="email">Your Email</label>
+                                            <div id="email-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="contact-error" class="form-control" id="contact" name="contact" placeholder="Your Contact">
+                                            <label for="contact">Your Contact</label>
+                                            <div id="contact-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="company-error" class="form-control" id="company" name="company" placeholder="workplace name">
+                                            <label for="company">companyname</label>
+                                            <div id="company-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="username-error" class="form-control" id="username" name="username" placeholder="Username">
+                                            <label for="username">Username</label>
+                                            <div id="username-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="text" aria-describedby="password-error" class="form-control" id="password" name="password" placeholder="Password">
+                                            <label for="password">Password</label>
+                                            <div id="password-error"></div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-primary w-100 py-3" type="button" onclick="validate()">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function showError(input, errorId, message) {
+                document.getElementById(errorId).innerHTML = message;
+                document.getElementById(errorId).className = 'invalid-feedback';
+                input.className = 'form-control is-invalid';
+                input.focus();
+            }
+    
+            function resetError(input, errorId) {
+                document.getElementById(errorId).innerHTML = 'Looks Good';
+                document.getElementById(errorId).className = 'valid-feedback';
+                input.className = 'form-control is-valid';
+            }
+    
+            function validateInput(inputFieldName, pattern, requiredErrorMsg, invalidErrorMsg) {
+                var form = document.getElementById('staffform');
+                var input = form.querySelector('[id="' + inputFieldName + '"]');
+                if (input.value.trim() === '') {
+                    showError(input, inputFieldName + '-error', requiredErrorMsg);
+                    return false;
+                } else if (!pattern.test(input.value)) {
+                    showError(input, inputFieldName + '-error', invalidErrorMsg);
+                    return false;
+                } else {
+                    resetError(input, inputFieldName + '-error');
+                    return true;
+                }
+            }
+            
+            function validate() {
+                
+                // Validate each input with corresponding regex patterns
+                if (!validateInput('staffname', /^[a-zA-Z ]+$/, 'Name is required', 'Invalid name format')) return;
+                if (!validateInput('email', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email is required', 'Invalid email format')) return;
+                if (!validateInput('contact', /^[6-9][0-9]{9}$/, 'Contact number is required', 'Invalid contact number format')) return;
+                if (!validateInput('company', /.+/, 'This field is mandatory', '')) return;
+                if (!validateInput('username', /.+/, 'username is mandatory', '')) return;
+                if (!validateInput('password',  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]).{8,}$/, 'password cannot be empty', 'Password must contain at least 8 characters, including uppercase, lowercase, digit, and special character')) return;
+                
+                var form = document.getElementById('staffform');
+                // If all validations pass, submit the form
+                form.submit();
+            }
+        </script>
+        <!-- Contact End -->
+{% endblock %}

@@ -1,0 +1,259 @@
+{% load static %}
+<!-- Contact Start -->
+        <div class="container-xxl py-5" style="min-height:100vh">
+            <div class="container">
+                <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Applicant Details Here</h1>
+                <div class="row g-4">
+                    
+                    <div class="col-md-12">
+                                <!-- Search Start -->
+                                <div class="container-fluid border border-2 border-dark-subtle mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+                                    <div class="container">
+                                        <!-- form for CV filter -->
+                                        <form action='{% url "stafffilterCV" %}' method="post" id="filterCV">
+                                            {% csrf_token %}
+                                            <div class="row g-2">
+                                                <div class="col-md-10">
+                                                    <div class="row g-2">
+                                                        <div class="col-md-12">
+                                                            <input type="text" class="form-control" placeholder="Keyword" name="inputkey" oninput="" />
+                                                            <script>
+                                                                // function filterrecord(){
+                                                                //     alert("input value changing...");
+
+                                                                // }
+                                                            </script>
+                                                        </div>
+                                                        <!-- <div class="col-md-4">
+                                                            <select class="form-select" id="filterbasis">
+                                                                <option selected>Criteria</option>
+                                                                <option value="1">Qualification</option>
+                                                                <option value="2">Vacancy</option>
+                                                            </select>
+                                                            <script>
+                                                                filterbasis = document.getElementById('filterbasis');
+                                                                filterbasis.addEventListener('change', function(){
+                                                                    if(filterbasis.value == 1){
+                                                                        alert("CV will now be filtered on Qualification basis");
+                                                                    }
+                                                                    if(filterbasis.value == 2){
+                                                                        alert("CV will now be filtered based on the vacancy applied for");
+                                                                    }
+                                                                });
+                                                            </script>
+                                                        </div> -->
+                            
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <button class="btn btn-dark border-0 w-75" type="submit">Search</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                        <!-- end form  -->
+                                    </div>
+                                </div>
+                                <!-- Search End -->
+                    </div>
+                    <div hidden>
+                        {{searchbykey}} <br>
+                        {{searchbydegree}}
+                    </div>
+
+                    <!-- Management Table  -->
+                    <div class="col-md-12">
+                        <div class="wow fadeInUp" data-wow-delay="0.5s">
+                            <table class="table align-middle mb-0 bg-white mx-auto">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th>Sl no</th>
+                                    <th>Name</th>
+                                    <th>Job Experience</th>
+                                    <th>Highest Qualification</th>
+                                    <th>Contact</th>
+                                    <th>Address</th>
+                                    <th>Applied Post</th>
+                                    <th>View CV</th>
+                                    <th>Status</th>
+                                    <th>Remove Applicant</th>
+                                    {% comment %} <th>Status</th> {% endcomment %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for apct in apctdata  %}
+                                    
+                                    <tr data-cvpath="{{apct.cvpath}}">
+                                        
+                                        <td>
+                                            <p class="fw-bold mb-1"> {{forloop.counter}} </p>
+                                        </td>
+                                        <td>
+                                            <p class="fw-bold mb-1">{{apct.applicantname}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="fw-normal mb-1"> {{apct.experience}} </p>
+                                        </td>
+                                        <td>
+                                            <p class="fw-normal mb-1"> {{apct.degree}} </p>
+                                        </td>
+                                        <td>
+                                            <p class="fw-normal mb-1"> {{apct.contact}} </p>
+                                        </td>
+                                        <td><p class="text-muted mb-0"> {{apct.address}} </p></td>
+                                        <td><p class="text-muted mb-0"> {{apct.appliedpost}} </p></td>
+
+
+                                         <td><button class="btn btn-secondary " onclick="viewImage('{{ apct.cvpath.url }}')">View</button></td>
+
+
+                                         <td><button class="btn btn-warning statusbutton" onclick="changevalue('{{forloop.counter}}','{{apct.id}}')">{{apct.hirestatus}}</button>
+                                            <input type="text" value="{{apct.hirestatus}}" class="hiringstatus" hidden></input>
+                                        </td>
+                                        <script>
+                                            function viewImage(fmri_photo) {
+                                                var imageUrl = fmri_photo;
+                                                window.open(imageUrl, '_blank');
+                                            }
+                                        </script>
+                                        <script>
+                                            // send hirestatus to views.py 
+                                            function send_hirestatus_tobackend(statusval,apctid) {
+                                                // Define the data to send
+                                            const hirestatus = statusval;
+
+                                            console.log("apctid: "+apctid);
+
+                                            // Construct the URL with query parameters
+                                            var url = "{% url 'update_hirestatus' %}?" +
+                                            "hire_status=" + encodeURIComponent(hirestatus) +
+                                            "&apctid=" + encodeURIComponent(apctid);
+                                            // Redirect to the constructed URL
+                                            window.location.href = url;
+                                            }
+                                            function changevalue(rowid,apctid) {
+
+                                                rowid = rowid - 1;
+                                                console.log(apctid);
+                                                hiringstatus = document.getElementsByClassName('hiringstatus')[rowid];
+                                                statusbutton = document.getElementsByClassName('statusbutton')[rowid];
+                                                if(hiringstatus.value == "waiting"){
+                                                    hiringstatus.value =  "hired";
+                                                    statusbutton.className = "btn btn-primary statusbutton";
+                                                    statusbutton.innerText = 'hired';  
+                                                    alert(""+hiringstatus.value);
+
+                                                    statusval = hiringstatus.value;
+                                                    send_hirestatus_tobackend(statusval,apctid);
+                                                }
+                                                else {
+                                                    hiringstatus.value =  "waiting";
+                                                    statusbutton.className = "btn btn-warning statusbutton";
+                                                    statusbutton.innerText = 'waiting'; 
+                                                    alert(""+hiringstatus.value);
+
+                                                    statusval = hiringstatus.value;
+                                                    send_hirestatus_tobackend(statusval,apctid);
+                                                };
+                                            }
+                                        </script>
+
+
+                                         <!-- Modal -->
+                                        <div class="modal fade" id="cvviewermodal{{forloop.counter}}" tabindex="-1" aria-labelledby="cvviewermodalLabel{{forloop.counter}}" aria-hidden="true">
+                                          <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="cvviewermodalLabel{{forloop.counter}}">Resume</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body">
+                                                {{apct.cvpath.url}}
+                                                <iframe class="d-block" src="{{apct.cvpath.url}}" type="application/pdf" width="720px" height="540px"></iframe>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletingmodel{{forloop.counter}}">Remove</button></td>                                    
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="deletingmodel{{forloop.counter}}" tabindex="-1" aria-labelledby="deletingmodelLabel{{forloop.counter}}" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="deletingmodelLabel{{forloop.counter}}">Remove Applicant</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                              </div>
+                                              <div class="modal-body text-start">
+                                                Are you sure you want to remove this user {{apct.log_id.id}} ? 
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a 
+                                                href='{% url "removeapct"%}?delid={{apct.log_id.id}}'
+                                                class="btn btn-danger"
+                                                >
+                                                Remove</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- End of Management Table  -->
+                </div>
+            </div>
+        </div>
+        <!-- Contact End -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                hiringstatus = document.getElementsByClassName('hiringstatus');
+                statusbutton = document.getElementsByClassName('statusbutton');
+                for(let i=0; i < hiringstatus.length; i++) {
+                    if (hiringstatus[i].value == "hired") {
+                        statusbutton[i].className = "btn btn-primary statusbutton";
+                    }
+                }
+            });
+            form = document.getElementById('filterCV');
+            form.addEventListener('submit', function(event){
+                event.preventDefault();
+
+
+                // // Select elements with a specific data attribute
+                // var elements = document.querySelectorAll('[data-cvpath]');
+
+                // // Loop through the selected elements
+                // elements.forEach(function(element) {
+                //     // Check the value of the data attribute
+                //     var data_attr_value = element.dataset.cvpath;
+                //     if(data_attr_value != "cv_base/bn11.pdf"){
+                //         alert('valid');
+                //         element.style.display = "none";
+                //     }
+                // });
+
+                // // Select elements with a specific data attribute
+                // var elements = document.querySelectorAll('[data-cvpath]');
+
+                // // Loop through the selected elements
+                // elements.forEach(function(element) {
+                //     // Check the value of the data attribute
+                //     var data_attr_value = element.dataset.cvpath;
+                //     if(data_attr_value != "cv_base/bn11.pdf"){
+                //         //alert('valid');
+                //         element.style.display = "none";
+                //     }
+                // });
+
+
+
+                // alert("you clicked the submit button");
+                form.submit();
+
+            });
+        </script>   

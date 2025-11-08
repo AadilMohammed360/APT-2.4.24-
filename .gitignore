@@ -1,0 +1,12 @@
+__pycache__/
+
+# Django migration files (optional: if you regenerate them often)
+projectAPT/__pycache__/
+projectAPT/projectAPT/__pycache__/
+projectAPT/BaseApp/__pycache__/
+# projectAPT/BaseApp/migrations/*.py
+# !projectAPT/BaseApp/migrations/__init__.py
+projectAPT/BaseApp/migrations/__pycache__/
+
+.vscode/
+whatsapp/*.db

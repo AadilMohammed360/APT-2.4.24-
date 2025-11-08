@@ -1,0 +1,77 @@
+{% extends "applicant/apctlayout.html" %}
+{% load static %}
+{% block header %}
+
+<!-- Header End -->
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Testimonial</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb text-uppercase">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Testimonial</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Header End -->
+{% endblock %}
+{% block content %}
+
+
+<!-- Testimonial Start -->
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container">
+        <h1 class="text-center mb-5">Our Clients Say!!!</h1>
+        <div class="owl-carousel testimonial-carousel">
+            <div class="testimonial-item bg-light rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>"The services provided by XYZ Company exceeded my expectations. Their attention to detail and commitment to excellence are commendable."</p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded" style="width: 50px; height: 50px;" src="{% static 'img/testimonial-1.jpg' %}" alt="Client Image">
+                    <div class="ps-3">
+                        <h5 class="mb-1">John Doe</h5>
+                        <small>CEO, ABC Corporation</small>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-item bg-light rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>"I have been a client of XYZ Company for several years, and I am continually impressed by their professionalism and dedication to client satisfaction."</p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded" style="width: 50px; height: 50px;" src="{% static 'img/testimonial-2.jpg' %}" alt="Client Image">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Jane Smith</h5>
+                        <small>Founder, XYZ Enterprises</small>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-item bg-light rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>"Working with XYZ Company has been a game-changer for our business. Their expertise and personalized approach have helped us achieve remarkable results."</p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded" style="width: 50px; height: 50px;" src="{% static 'img/testimonial-3.jpg' %}" alt="Client Image">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Michael Johnson</h5>
+                        <small>Director, Global Solutions</small>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-item bg-light rounded p-4">
+                <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
+                <p>"I highly recommend XYZ Company to anyone seeking top-notch services and exceptional customer support. They are simply the best in the industry."</p>
+                <div class="d-flex align-items-center">
+                    <img class="img-fluid flex-shrink-0 rounded" style="width: 50px; height: 50px;" src="{% static 'img/testimonial-4.jpg' %}" alt="Client Image">
+                    <div class="ps-3">
+                        <h5 class="mb-1">Emily Williams</h5>
+                        <small>Marketing Manager, Acme Inc.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Testimonial End -->
+
+{% endblock %}

@@ -1,0 +1,290 @@
+{% extends "staff/stafflayout.html" %}
+{% load static %}
+{% block content %}
+<!-- Header End -->
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">Vacancy</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb text-uppercase">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Vacancy</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Header End -->
+
+
+<!-- Contact Start -->
+<div class="container-xxl py-5" style="min-height:100vh">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Manage Vacancies</h1>
+        <div class="row g-4">
+            <div class="col-12 text-end">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addVacancyModal">
+                    Add
+                </button>
+
+                <!-- Add Modal -->
+                <div class="modal fade" id="addVacancyModal" tabindex="-1" aria-labelledby="addVacancyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog model-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="addVacancyModalLabel">Add Vacancy</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method='post' action='{% url "registervacancy" %}' id="addVacancyForm">
+                                    {% csrf_token %}
+                                    <input type="text" class="form-control" id="role" name="role" value="staff" hidden>
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="vacancyname-error" class="form-control vacancyname" name="vacancyname" placeholder="Vacancy Name">
+                                                <label for="name">Vacancy Name</label>
+                                                <div class="vacancyname-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="seat-error" class="form-control seat" name="seat" placeholder="Seats Available">
+                                                <label for="seat">Seats Available</label>
+                                                <div class="seat-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="company-error" class="form-control company" name="company" placeholder="companys Available">
+                                                <label for="company">Company Name</label>
+                                                <div class="company-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="salary-error" class="form-control salary" name="salary" placeholder="salarys Available">
+                                                <label for="salary">Starting Salary</label>
+                                                <div class="salary-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="desc-error" class="form-control desc" name="desc" placeholder="descs Available">
+                                                <label for="desc">Description</label>
+                                                <div class="desc-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-floating">
+                                                <input type="text" aria-describedby="qualification-error" class="form-control qualification" name="qualification" placeholder="qualifications Available">
+                                                <label for="qualification">Qualification</label>
+                                                <div class="qualification-error invalid-feedback"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" onclick="validateAddVacancy()">Add Vacancy</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-12">
+                <div class="wow fadeInUp" data-wow-delay="0.5s">
+                    <table class="table align-middle mb-0 bg-white mx-auto">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Sl no</th>
+                                <th>Vacancy Name</th>
+                                <th>Seats Available</th>
+                                <th>Company Name</th>
+                                <th>Starting Salary</th>
+                                <th>Update Vacancy</th>
+                                <th>Remove Vacancy</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vacancy in vacancydata  %}
+
+                            <tr>
+
+                                <td><p class="fw-bold mb-1"> {{forloop.counter}} </p></td>
+                                <td>
+                                    <p class="fw-bold mb-1">{{vacancy.vacancyname}}</p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1"> {{vacancy.seats}} </p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1"> {{vacancy.company}} </p>
+                                </td>
+                                <td>
+                                    <p class="fw-normal mb-1"> {{vacancy.salary}} </p>
+                                </td>
+
+                                <td><button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateVacancyModal{{forloop.counter}}">Update</button></td>
+                                <!-- Update Modal -->
+                                <div class="modal fade" id="updateVacancyModal{{forloop.counter}}" tabindex="-1" aria-labelledby="updateVacancyModalLabel{{forloop.counter}}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="updateVacancyModalLabel{{forloop.counter}}">Update Vacancy {{vacancy.id}}</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form method='post' action='{% url "updatevacancy" %}' id="updateVacancyForm{{forloop.counter}}">
+                                                    {% csrf_token %}
+                                                    <input type="text" class="form-control" id="role" name="role" value="staff" hidden>
+                                                    <input type="text" class="form-control" id="recordid" name="recordid" value="{{vacancy.id}}" hidden>
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newvacancyname{{forloop.counter}}-error" class="form-control newvacancyname" name="newvacancyname" placeholder="Vacancy Name">
+                                                                <label for="name{{forloop.counter}}">Vacancy Name</label>
+                                                                <div class="newvacancyname{{forloop.counter}}-error invalid-feedback"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newseat{{forloop.counter}}-error" class="form-control newseat" name="newseat" placeholder="newseats Available">
+                                                                <label for="newseat{{forloop.counter}}">newseats Available</label>
+                                                                <div class="newseat{{forloop.counter}}-error invalid-feedback"></div>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newcompany{{forloop.counter}}-error" class="form-control newcompany" name="newcompany" placeholder="newcompanys Available">
+                                                                <label for="newcompany{{forloop.counter}}">Company Name</label>
+                                                                <div class="newcompany{{forloop.counter}}-error invalid-feedback"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newsalary{{forloop.counter}}-error" class="form-control newsalary" name="newsalary" placeholder="newsalarys Available">
+                                                                <label for="newsalary{{forloop.counter}}">Starting Salary</label>
+                                                                <div class="newsalary{{forloop.counter}}-error invalid-feedback"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newdesc{{forloop.counter}}-error" class="form-control newdesc" name="newdesc" placeholder="newdescs Available">
+                                                                <label for="newdesc{{forloop.counter}}">Description</label>
+                                                                <div class="newdesc{{forloop.counter}}-error invalid-feedback"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="form-floating">
+                                                                <input type="text" aria-describedby="newqualification{{forloop.counter}}-error" class="form-control newqualification" name="newqualification" placeholder="newqualifications Available">
+                                                                <label for="newqualification{{forloop.counter}}">Qualification</label>
+                                                                <div class="newqualification{{forloop.counter}}-error invalid-feedback"></div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="validateUpdateVacancy('{{forloop.counter}}')">Update Vacancy</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteVacancyModal{{forloop.counter}}">Remove</button></td>
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteVacancyModal{{forloop.counter}}" tabindex="-1" aria-labelledby="deleteVacancyModalLabel{{forloop.counter}}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="deleteVacancyModalLabel{{forloop.counter}}">Remove Staff</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to remove vacancy {{vacancy.id}} ?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <a href='{% url "removevacancy"%}?delid={{vacancy.id}}' class="btn btn-danger">
+                                                    Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Contact End -->
+<script>
+    function showError(input, errorClass, message) {
+        input.classList.add('is-invalid');
+        var errorDiv = input.parentElement.querySelector('.' + errorClass);
+        errorDiv.innerText = message;
+        errorDiv.classList.add('invalid-feedback');
+        input.focus();
+    }
+
+    function resetError(input, errorClass) {
+        input.classList.remove('is-invalid');
+        var errorDiv = input.parentElement.querySelector('.' + errorClass);
+        errorDiv.innerText = '';
+        errorDiv.classList.remove('invalid-feedback');
+    }
+
+    function validateInput(input, pattern, requiredErrorMsg, invalidErrorMsg, errorClass) {
+        if (!input.value.trim()) {
+            showError(input, errorClass, requiredErrorMsg);
+            return false;
+        } else if (!pattern.test(input.value)) {
+            showError(input, errorClass, invalidErrorMsg);
+            return false;
+        } else {
+            resetError(input, errorClass);
+            return true;
+        }
+    }
+
+    function validateAddVacancy() {
+        var vacancyNameInput = document.querySelector('.vacancyname');
+        var seatInput = document.querySelector('.seat');
+
+        if (!validateInput(vacancyNameInput, /^[a-zA-Z ]+$/, 'Name is required', 'Invalid name format', 'vacancyname-error')) return;
+        if (!validateInput(seatInput, /^[0-9]+$/, 'Seat count is required', 'Invalid seat count', 'seat-error')) return;
+
+        alert("Vacancy added successfully");
+        document.getElementById('addVacancyForm').submit();
+    }
+
+    function validateUpdateVacancy(rowid) {
+        // var newVacancyNameInput = document.querySelector('.newvacancyname');
+        // var newSeatInput = document.querySelector('.newseat');
+
+        // if (!validateInput(newVacancyNameInput, /^[a-zA-Z ]+$/, 'Name is required', 'Invalid name format', 'newvacancyname-error')) return;
+        // if (!validateInput(newSeatInput, /^[0-9]+$/, 'Seat count is required', 'Invalid seat count', 'newseat-error')) return;
+
+        // alert("Vacancy updated successfully");
+        document.getElementById('updateVacancyForm' + rowid).submit();
+    }
+</script>
+{% endblock %}
+
