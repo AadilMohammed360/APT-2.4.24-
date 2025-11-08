@@ -35,7 +35,7 @@ urlpatterns = [
     path('apct/passwordupdate', views.apctpasswordupdate, name="apctpasswordupdate"),
     path('apct/profileupdate', views.apctprofileupdate, name="apctprofileupdate"),
     path('apct/testimonial', views.apcttestimonial, name="apcttestimonial"),
-    path('update_hirestatus/', views.update_hirestatus, name="update_hirestatus"),
+    # path('update_hirestatus/', views.update_hirestatus, name="update_hirestatus"),
     path('apct/jobapply', views.jobapply, name="jobapply"),
 
     #render staff pages
@@ -66,19 +66,19 @@ urlpatterns = [
 
     #  applicant_registration
     path('apct_register', views.apct_register, name="apct_register"),
-
     #applicant updation
     path('apct_update', views.apct_update, name="apct_update"),
-
     #applicant updation
-    path('apctprivacy', views.apctprivacy, name="apctprivacy"),
-    
+    path('apctprivacy', views.apctprivacy, name="apctprivacy"),    
     path('staffprivacy', views.staffprivacy, name="staffprivacy"),
-
     path('adminprivacy', views.adminprivacy, name="adminprivacy"),
     #staff updation
     path('staff_update', views.staff_update, name="staff_update"),
-
     #account login
     path('accountlogin', views.accountlogin, name="accountlogin"),
+    
+    # Add this to urlpatterns
+    path('apct/notifications', views.apctnotifications, name="apctnotifications"),
+    path('staff/updatestatus', views.updateapplicationstatus, name="updateapplicationstatus"),
+    
 ]

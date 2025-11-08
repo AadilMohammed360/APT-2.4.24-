@@ -44,8 +44,14 @@ def profileupdate(request):
     return render(request, 'profile_update.html')
 def testimonial(request):
     return render(request, 'testimonial.html')
+
+from .models import Application
+
 def viewapplicants(request):
-    return render(request, 'view applicants.html')
+    # fetch all applications, select related applicant and vacancy for efficiency
+    applications = Application.objects.select_related('applicant', 'vacancy').all()
+    return render(request, 'staff/viewapplicants.html', {'applications': applications})
+
 
 # secondary pages (sorted for applicant)
 def apctwelcome(request):
@@ -319,24 +325,27 @@ def apct_register(request):
         data.save()        
     return redirect('index')
 
-def update_hirestatus(request):
-        if request.method == 'GET':
-            # Get the data from the query parameters
-            hiringstatus = request.GET['hire_status']
-            apctid = request.GET['apctid']
-            print(hiringstatus)
-            print(apctid)
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponseBadRequest
+from .models import Application
 
-            # Process the data (e.g., save it to a database)
-            # Your processing logic here...
+def updateapplicationstatus(request):
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        new_status = request.POST.get('status')
+        notes = request.POST.get('notes', '')
+        
+        if not application_id or not application_id.isdigit():
+            return HttpResponseBadRequest("Invalid application id")
+        
+        application = get_object_or_404(Application, id=int(application_id))
+        application.status = new_status
+        if notes:
+            application.notes = notes
+        application.save()
+    
+    return redirect('viewapplicants')
 
-            apctdata = Applicant.objects.get(id=apctid)
-            apctdata.hirestatus = hiringstatus
-            apctdata.save()
-
-
-        apctdata = Applicant.objects.all()
-        return render(request, 'staff/view applicants.html',{'apctdata':apctdata,})
 
 #applicant update
 def apct_update(request):
@@ -468,3 +477,52 @@ def jobapply(request):
             apctdata.appliedpost = request.GET['appliedpost']
             apctdata.save()
         return redirect('apctcategory')
+    
+    
+# new views from claude
+
+# Add this view function
+def apctnotifications(request):
+    if 'log_id' not in request.session:
+        return redirect('login')
+    
+    log_id = request.session.get('log_id')
+    applicant = Applicant.objects.get(log_id=log_id)
+    
+    # Get all applications for this applicant
+    applications = Application.objects.filter(applicant=applicant).select_related('vacancy')
+    
+    # Group by status for better visualization
+    active_applications = applications.exclude(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
+    completed_applications = applications.filter(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
+    
+    context = {
+        'applications': applications,
+        'active_applications': active_applications,
+        'completed_applications': completed_applications,
+        'total_applications': applications.count(),
+        'active_count': active_applications.count()
+    }
+    
+    return render(request, 'applicant/notifications.html', context)
+
+# Update existing applyaction view to create Application record
+def applyaction(request):
+    if 'log_id' not in request.session:
+        return redirect('login')
+    
+    log_id = request.session.get('log_id')
+    vacancy_id = request.POST.get('vacancy_id')
+    
+    applicant = Applicant.objects.get(log_id=log_id)
+    vacancy = Vacancy.objects.get(id=vacancy_id)
+    
+    # Create Application record
+    Application.objects.create(
+        applicant=applicant,
+        vacancy=vacancy,
+        status='APPLIED'
+    )
+    
+    return redirect('apctjoblist')
+

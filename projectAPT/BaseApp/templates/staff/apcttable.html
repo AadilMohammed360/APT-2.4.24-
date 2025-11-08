@@ -23,26 +23,7 @@
 
                                                                 // }
                                                             </script>
-                                                        </div>
-                                                        <!-- <div class="col-md-4">
-                                                            <select class="form-select" id="filterbasis">
-                                                                <option selected>Criteria</option>
-                                                                <option value="1">Qualification</option>
-                                                                <option value="2">Vacancy</option>
-                                                            </select>
-                                                            <script>
-                                                                filterbasis = document.getElementById('filterbasis');
-                                                                filterbasis.addEventListener('change', function(){
-                                                                    if(filterbasis.value == 1){
-                                                                        alert("CV will now be filtered on Qualification basis");
-                                                                    }
-                                                                    if(filterbasis.value == 2){
-                                                                        alert("CV will now be filtered based on the vacancy applied for");
-                                                                    }
-                                                                });
-                                                            </script>
-                                                        </div> -->
-                            
+                                                        </div>                            
                                                     </div>
                                                 </div>
                                                 <div class="col-md-2">
@@ -55,10 +36,6 @@
                                     </div>
                                 </div>
                                 <!-- Search End -->
-                    </div>
-                    <div hidden>
-                        {{searchbykey}} <br>
-                        {{searchbydegree}}
                     </div>
 
                     <!-- Management Table  -->
@@ -80,36 +57,39 @@
                                     {% comment %} <th>Status</th> {% endcomment %}
                                 </tr>
                                 </thead>
-                                <tbody>
-                                    {% for apct in apctdata  %}
-                                    
-                                    <tr data-cvpath="{{apct.cvpath}}">
-                                        
-                                        <td>
-                                            <p class="fw-bold mb-1"> {{forloop.counter}} </p>
-                                        </td>
-                                        <td>
-                                            <p class="fw-bold mb-1">{{apct.applicantname}}</p>
-                                        </td>
-                                        <td>
-                                            <p class="fw-normal mb-1"> {{apct.experience}} </p>
-                                        </td>
-                                        <td>
-                                            <p class="fw-normal mb-1"> {{apct.degree}} </p>
-                                        </td>
-                                        <td>
-                                            <p class="fw-normal mb-1"> {{apct.contact}} </p>
-                                        </td>
-                                        <td><p class="text-muted mb-0"> {{apct.address}} </p></td>
-                                        <td><p class="text-muted mb-0"> {{apct.appliedpost}} </p></td>
-
-
-                                         <td><button class="btn btn-secondary " onclick="viewImage('{{ apct.cvpath.url }}')">View</button></td>
-
-
-                                         <td><button class="btn btn-warning statusbutton" onclick="changevalue('{{forloop.counter}}','{{apct.id}}')">{{apct.hirestatus}}</button>
-                                            <input type="text" value="{{apct.hirestatus}}" class="hiringstatus" hidden></input>
-                                        </td>
+<tbody>
+  {% for application in applications %}
+  <tr data-cvpath="{{ application.applicant.cvpath }}">
+    <td><p class="fw-bold mb-1">{{ forloop.counter }}</p></td>
+    <td><p class="fw-bold mb-1">{{ application.applicant.applicantname }}</p></td>
+    <td><p class="fw-normal mb-1">{{ application.applicant.experience }}</p></td>
+    <td><p class="fw-normal mb-1">{{ application.applicant.degree }}</p></td>
+    <td><p class="fw-normal mb-1">{{ application.applicant.contact }}</p></td>
+    <td><p class="text-muted mb-0">{{ application.applicant.address }}</p></td>
+    <td><p class="text-muted mb-0">{{ application.vacancy.vacancyname }}</p></td>
+    <td><button class="btn btn-secondary" onclick="viewImage('{{ application.applicant.cvpath.url }}')">View</button></td>
+    <td>
+      <form action="{% url 'updateapplicationstatus' %}" method="POST" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="application_id" value="{{ application.id }}">
+        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="APPLIED" {% if application.status == 'APPLIED' %}selected{% endif %}>Application Submitted</option>
+          <option value="UNDER_REVIEW" {% if application.status == 'UNDER_REVIEW' %}selected{% endif %}>Under Review</option>
+          <option value="SHORTLISTED" {% if application.status == 'SHORTLISTED' %}selected{% endif %}>Shortlisted</option>
+          <option value="LEVEL_1_SCHEDULED" {% if application.status == 'LEVEL_1_SCHEDULED' %}selected{% endif %}>Level 1 Scheduled</option>
+          <option value="LEVEL_1_COMPLETED" {% if application.status == 'LEVEL_1_COMPLETED' %}selected{% endif %}>Level 1 Completed</option>
+          <option value="LEVEL_2_SCHEDULED" {% if application.status == 'LEVEL_2_SCHEDULED' %}selected{% endif %}>Level 2 Scheduled</option>
+          <option value="LEVEL_2_COMPLETED" {% if application.status == 'LEVEL_2_COMPLETED' %}selected{% endif %}>Level 2 Completed</option>
+          <option value="LEVEL_3_SCHEDULED" {% if application.status == 'LEVEL_3_SCHEDULED' %}selected{% endif %}>Level 3 Scheduled</option>
+          <option value="LEVEL_3_COMPLETED" {% if application.status == 'LEVEL_3_COMPLETED' %}selected{% endif %}>Level 3 Completed</option>
+          <option value="HR_ROUND" {% if application.status == 'HR_ROUND' %}selected{% endif %}>HR Round</option>
+          <option value="OFFER_EXTENDED" {% if application.status == 'OFFER_EXTENDED' %}selected{% endif %}>Offer Extended</option>
+          <option value="HIRED" {% if application.status == 'HIRED' %}selected{% endif %}>Hired</option>
+          <option value="REJECTED" {% if application.status == 'REJECTED' %}selected{% endif %}>Rejected</option>
+        </select>
+      </form>
+    </td>
+    <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletingmodel{{ forloop.counter }}">Remove</button></td>
                                         <script>
                                             function viewImage(fmri_photo) {
                                                 var imageUrl = fmri_photo;
@@ -196,10 +176,11 @@
                                               </div>
                                             </div>
                                           </div>
-                                        </div>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
+                                        </div>    
+  </tr>
+  {% endfor %}
+</tbody>
+
                             </table>
                         </div>
                     </div>
@@ -223,36 +204,6 @@
             form.addEventListener('submit', function(event){
                 event.preventDefault();
 
-
-                // // Select elements with a specific data attribute
-                // var elements = document.querySelectorAll('[data-cvpath]');
-
-                // // Loop through the selected elements
-                // elements.forEach(function(element) {
-                //     // Check the value of the data attribute
-                //     var data_attr_value = element.dataset.cvpath;
-                //     if(data_attr_value != "cv_base/bn11.pdf"){
-                //         alert('valid');
-                //         element.style.display = "none";
-                //     }
-                // });
-
-                // // Select elements with a specific data attribute
-                // var elements = document.querySelectorAll('[data-cvpath]');
-
-                // // Loop through the selected elements
-                // elements.forEach(function(element) {
-                //     // Check the value of the data attribute
-                //     var data_attr_value = element.dataset.cvpath;
-                //     if(data_attr_value != "cv_base/bn11.pdf"){
-                //         //alert('valid');
-                //         element.style.display = "none";
-                //     }
-                // });
-
-
-
-                // alert("you clicked the submit button");
                 form.submit();
 
             });

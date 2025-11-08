@@ -1,0 +1,137 @@
+{% extends "applicant/apctlayout.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-xxl py-5">
+    <div class="container">
+        <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">My Application Status</h1>
+        
+        <!-- Summary Cards -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h2>{{ total_applications }}</h2>
+                        <p class="mb-0">Total Applications</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.3s">
+                <div class="card bg-warning text-white">
+                    <div class="card-body text-center">
+                        <h2>{{ active_count }}</h2>
+                        <p class="mb-0">Active Applications</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 wow fadeInUp" data-wow-delay="0.5s">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h2>{{ completed_applications.count }}</h2>
+                        <p class="mb-0">Completed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Applications -->
+        {% if active_applications %}
+        <div class="mb-5 wow fadeInUp" data-wow-delay="0.1s">
+            <h3 class="mb-4">Active Applications</h3>
+            {% for app in active_applications %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="card-title">{{ app.vacancy.vacancyname }}</h5>
+                            <p class="mb-1"><strong>Company:</strong> {{ app.vacancy.company }}</p>
+                            <p class="mb-1"><strong>Applied:</strong> {{ app.applied_date|date:"M d, Y" }}</p>
+                            <p class="mb-1"><strong>Last Updated:</strong> {{ app.status_updated_date|date:"M d, Y" }}</p>
+                            {% if app.notes %}
+                            <p class="mb-0"><strong>Notes:</strong> {{ app.notes }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4 text-end">
+                            {% if app.status == 'APPLIED' %}
+                                <span class="badge bg-info fs-6">Application Submitted</span>
+                            {% elif app.status == 'UNDER_REVIEW' %}
+                                <span class="badge bg-primary fs-6">Under Review</span>
+                            {% elif app.status == 'SHORTLISTED' %}
+                                <span class="badge bg-success fs-6">Shortlisted</span>
+                            {% elif 'LEVEL_1' in app.status %}
+                                <span class="badge bg-warning fs-6">Level 1 Interview</span>
+                            {% elif 'LEVEL_2' in app.status %}
+                                <span class="badge bg-warning fs-6">Level 2 Interview</span>
+                            {% elif 'LEVEL_3' in app.status %}
+                                <span class="badge bg-warning fs-6">Level 3 Interview</span>
+                            {% elif app.status == 'HR_ROUND' %}
+                                <span class="badge bg-warning fs-6">HR Round</span>
+                            {% elif app.status == 'OFFER_EXTENDED' %}
+                                <span class="badge bg-success fs-6">Offer Extended</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="progress mt-3" style="height: 25px;">
+                        {% if app.status == 'APPLIED' %}
+                            <div class="progress-bar" style="width: 10%">10%</div>
+                        {% elif app.status == 'UNDER_REVIEW' %}
+                            <div class="progress-bar" style="width: 20%">20%</div>
+                        {% elif app.status == 'SHORTLISTED' %}
+                            <div class="progress-bar" style="width: 35%">35%</div>
+                        {% elif 'LEVEL_1' in app.status %}
+                            <div class="progress-bar bg-warning" style="width: 50%">50%</div>
+                        {% elif 'LEVEL_2' in app.status %}
+                            <div class="progress-bar bg-warning" style="width: 65%">65%</div>
+                        {% elif 'LEVEL_3' in app.status %}
+                            <div class="progress-bar bg-warning" style="width: 80%">80%</div>
+                        {% elif app.status == 'HR_ROUND' %}
+                            <div class="progress-bar bg-info" style="width: 90%">90%</div>
+                        {% elif app.status == 'OFFER_EXTENDED' %}
+                            <div class="progress-bar bg-success" style="width: 95%">95%</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            <h4>No Active Applications</h4>
+            <p>You haven't applied for any jobs yet. <a href="{% url 'apctjoblist' %}">Browse Jobs</a></p>
+        </div>
+        {% endif %}
+
+        <!-- Completed Applications -->
+        {% if completed_applications %}
+        <div class="wow fadeInUp" data-wow-delay="0.3s">
+            <h3 class="mb-4">Completed Applications</h3>
+            {% for app in completed_applications %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5 class="card-title">{{ app.vacancy.vacancyname }}</h5>
+                            <p class="mb-1"><strong>Company:</strong> {{ app.vacancy.company }}</p>
+                            <p class="mb-1"><strong>Applied:</strong> {{ app.applied_date|date:"M d, Y" }}</p>
+                            <p class="mb-1"><strong>Closed:</strong> {{ app.status_updated_date|date:"M d, Y" }}</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            {% if app.status == 'HIRED' %}
+                                <span class="badge bg-success fs-6">Hired ✓</span>
+                            {% elif app.status == 'REJECTED' %}
+                                <span class="badge bg-danger fs-6">Not Selected</span>
+                            {% elif app.status == 'WITHDRAWN' %}
+                                <span class="badge bg-secondary fs-6">Withdrawn</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
