@@ -204,6 +204,79 @@ If you get a **blank page**, **error**, or **timeout**, let me know what it says
 
 
 
+Perfect — thanks for clarifying. Since you have **two stacks (WAMP and XAMPP)** installed, the key is to make Django explicitly connect to **XAMPP’s MySQL** (running on port `3307`) instead of accidentally hitting WAMP’s older MySQL service on `3306`.
 
+---
+
+### 🔍 What Django cares about
+Django doesn’t “see” Apache or phpMyAdmin directly — it only talks to the **MySQL server** via the connection settings in `settings.py`.  
+So the solution is to **force Django to use the correct host/port/credentials** for XAMPP’s MySQL.
+
+---
+
+### ✅ Steps to force Django to use XAMPP’s MySQL
+
+1. **Edit `settings.py` in your Django project**  
+   Update the `DATABASES` section like this:
+
+   ```python
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.mysql',
+           'NAME': 'your_db_name',        # the database you created in phpMyAdmin (XAMPP)
+           'USER': 'your_db_user',        # usually 'root' in XAMPP unless you set another
+           'PASSWORD': 'your_password',   # leave empty if root has no password
+           'HOST': '127.0.0.1',           # localhost
+           'PORT': '3307',                # XAMPP’s MySQL port
+           'OPTIONS': {
+               'charset': 'utf8mb4',      # avoids utf8mb3 error
+           },
+       }
+   }
+   ```
+
+   ⚠️ The critical part here is `'PORT': '3307'`.
+
+---
+
+2. **Confirm XAMPP’s MySQL is running**  
+   - Open XAMPP Control Panel → MySQL → Start.  
+   - Make sure it says listening on port `3307`.  
+
+   You can double‑check with:
+   ```bat
+   netstat -ano | findstr 3307
+   ```
+
+---
+
+3. **Stop WAMP’s MySQL service** (optional but recommended)  
+   - Open `services.msc` and stop/disable WAMP’s MySQL service.  
+   - This prevents Django from accidentally connecting to the wrong server on `3306`.
+
+---
+
+4. **Test the connection manually**  
+   From your command line, try:
+   ```bat
+   mysql -u root -P 3307 -h 127.0.0.1
+   ```
+   If you can log in, Django will also be able to connect.
+
+---
+
+### ⚡ Important notes
+- **Apache** and **phpMyAdmin** don’t matter for Django — they’re separate. Django runs its own dev server (`runserver`) and only needs MySQL.  
+- **phpMyAdmin** is just a web interface to MySQL. As long as Django points to the same database/port, you’ll see consistent data in both Django and phpMyAdmin.  
+- If you want to keep both stacks, always remember:  
+  - WAMP → MySQL on `3306`  
+  - XAMPP → MySQL on `3307`  
+  Django must be told explicitly which one to use.
+
+---
+
+👉 Once you set `'PORT': '3307'` in Django’s `settings.py`, it will ignore WAMP’s MySQL and only use XAMPP’s.  
+
+Do you want me to also show you how to **create a database in XAMPP’s phpMyAdmin** that Django can connect to right away?
 
 
