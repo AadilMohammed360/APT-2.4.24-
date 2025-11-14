@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema - Table Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1d29 0%, #252a3a 100%);
+            color: #e0e0e0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            padding-left: 20px;
+            border-left: 6px solid #9b59b6;
+            color: #fff;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 160px;
+            margin: 160px 0;
+        }
+
+        .table-card {
+            background: linear-gradient(135deg, #1a1d29 0%, #252a3a 100%);
+            border-radius: 12px;
+            padding: 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .table-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(155, 89, 182, 0.3);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #6a5080 0%, #7a5f95 100%);
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid rgba(155, 89, 182, 0.3);
+        }
+
+        .table-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .table-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-key {
+            color: #9b59b6;
+            font-size: 20px;
+        }
+
+        .icon-user {
+            color: #9b59b6;
+            font-size: 20px;
+        }
+
+        .icon-users {
+            color: #9b59b6;
+            font-size: 20px;
+        }
+
+        .table-description {
+            padding: 20px 25px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #b8b8b8;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-content {
+            padding: 25px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background 0.2s ease;
+        }
+
+        .field-row:hover {
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .field-row:last-child {
+            border-bottom: none;
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        .field-type {
+            color: #e74c3c;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .field-constraint {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #9b59b6;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        .primary-key {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+
+        .null-badge {
+            background: transparent;
+            color: #95a5a6;
+            border: 1px solid #95a5a6;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .field-constraint {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TABLE DESIGN</h1>
+
+        <div class="grid">
+            <!-- Login Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-name">baseapp_login</div>
+                    <div class="table-icon icon-key">🔑</div>
+                </div>
+                <div class="table-description">
+                    Centralized authentication and authorization table that manages user credentials and role-based access control. Supports three user roles (admin, staff, applicant) and serves as the authentication backbone for the entire system.
+                </div>
+                <div class="table-content">
+                    <div class="field-row">
+                        <div class="field-name">id <span class="badge primary-key">PK</span></div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">role</div>
+                        <div class="field-type">varchar(15)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">username</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">email</div>
+                        <div class="field-type">varchar(30)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">password</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vacancy Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-name">baseapp_vacancy</div>
+                    <div class="table-icon icon-key">🔒</div>
+                </div>
+                <div class="table-description">
+                    Stores job posting information including position titles, salary ranges, hiring companies, job descriptions, required qualifications, and available seats. Serves as the master table for all job openings.
+                </div>
+                <div class="table-content">
+                    <div class="field-row">
+                        <div class="field-name">id <span class="badge primary-key">PK</span></div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">vacancyname</div>
+                        <div class="field-type">varchar(50)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">salary</div>
+                        <div class="field-type">varchar(30)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">company</div>
+                        <div class="field-type">varchar(30)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">desc</div>
+                        <div class="field-type">longtext</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">qualification</div>
+                        <div class="field-type">longtext</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">seats</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Applicant Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-name">baseapp_applicant</div>
+                    <div class="table-icon icon-user">👤</div>
+                </div>
+                <div class="table-description">
+                    Stores profile information for job applicants including personal details, educational qualifications, work experience, and CV file paths. Links to the login table for authentication.
+                </div>
+                <div class="table-content">
+                    <div class="field-row">
+                        <div class="field-name">id <span class="badge primary-key">PK</span></div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">applicantname</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">email</div>
+                        <div class="field-type">varchar(50)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">contact</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">address</div>
+                        <div class="field-type">longtext</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">username</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">degree</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">experience</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">cvpath</div>
+                        <div class="field-type">varchar(100)</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">log_id_id</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">FK → baseapp_login</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-name">baseapp_staff</div>
+                    <div class="table-icon icon-users">👥</div>
+                </div>
+                <div class="table-description">
+                    Maintains staff member profiles including recruitment team personnel and HR staff who manage vacancies, review applications, and update applicant statuses.
+                </div>
+                <div class="table-content">
+                    <div class="field-row">
+                        <div class="field-name">id <span class="badge primary-key">PK</span></div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">staffname</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">email</div>
+                        <div class="field-type">varchar(50)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">contact</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">workplace</div>
+                        <div class="field-type">varchar(50)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">username</div>
+                        <div class="field-type">varchar(20)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">log_id_id</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">FK → baseapp_login</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <div class="table-name">baseapp_application</div>
+                    <div class="table-icon icon-key">📄</div>
+                </div>
+                <div class="table-description">
+                    Manages the complete application lifecycle tracking for each job application. Records application dates, current status (APPLIED, SHORTLISTED, INTERVIEWED, HIRED, REJECTED), status updates, staff notes, and optional ML-generated candidate scores.
+                </div>
+                <div class="table-content">
+                    <div class="field-row">
+                        <div class="field-name">id <span class="badge primary-key">PK</span></div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint"></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">applied_date</div>
+                        <div class="field-type">datetime(6)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">status</div>
+                        <div class="field-type">varchar(30)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">status_updated_date</div>
+                        <div class="field-type">datetime(6)</div>
+                        <div class="field-constraint">Not NULL</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">notes</div>
+                        <div class="field-type">longtext</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">ml_score</div>
+                        <div class="field-type">double</div>
+                        <div class="field-constraint"><span class="null-badge">NULL</span></div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">applicant_id</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">FK → baseapp_applicant</div>
+                    </div>
+                    <div class="field-row">
+                        <div class="field-name">vacancy_id</div>
+                        <div class="field-type">bigint(20)</div>
+                        <div class="field-constraint">FK → baseapp_vacancy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
