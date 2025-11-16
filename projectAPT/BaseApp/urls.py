@@ -1,10 +1,9 @@
-
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     
-
     # render template pages
     path('', views.index, name="index"),
     path('about', views.about, name="about"),
@@ -20,6 +19,7 @@ urlpatterns = [
     path('testimonial', views.testimonial, name="testimonial"),
     path('viewapplicants', views.viewapplicants, name="viewapplicants"),
 
+
     # render applicant pages
     path('apct/about', views.apctabout, name="apctabout"),
     path('apct/welcome', views.apctwelcome, name="apctwelcome"),
@@ -30,13 +30,17 @@ urlpatterns = [
     path('apct/404', views.apctpage404, name="apctpage404"),
     path('apct/category', views.apctcategory, name="apctcategory"),
     path('apct/contact', views.apctcontact, name="apctcontact"),
-    path('apct/jobdetail', views.apctjobdetail, name="apctjobdetail"),
+
     path('apct/joblist', views.apctjoblist, name="apctjoblist"),
     path('apct/passwordupdate', views.apctpasswordupdate, name="apctpasswordupdate"),
     path('apct/profileupdate', views.apctprofileupdate, name="apctprofileupdate"),
     path('apct/testimonial', views.apcttestimonial, name="apcttestimonial"),
-    path('update_hirestatus/', views.update_hirestatus, name="update_hirestatus"),
     path('apct/jobapply', views.jobapply, name="jobapply"),
+    
+    # NEW - Applicant notifications (keep new)
+    path('apct/notifications', views.apctnotifications, name="apctnotifications"),
+    path('apct/applyaction', views.applyaction, name="applyaction"),
+
 
     #render staff pages
     path('staff/welcome',views.staffwelcome,name="staffwelcome"),
@@ -55,6 +59,7 @@ urlpatterns = [
     path('staff/testimonial',views.stafftestimonial,name="stafftestimonial"),
     path('staff/view applicants',views.staffviewapplicants,name="staffviewapplicants"),
 
+
     #render admin pages
     path('administrator/welcome', views.adminwelcome, name="adminwelcome"),    
     path('administrator/addstaff', views.adminaddstaff, name="adminaddstaff"),
@@ -63,6 +68,7 @@ urlpatterns = [
     path('apct/removeapct', views.removeapct, name="removeapct"),
     path('staff/removevacancy', views.removevacancy, name="removevacancy"),
     path('administrator/passwordupdate', views.adminpasswordupdate, name="adminpasswordupdate"),
+
 
     #  applicant_registration
     path('apct_register', views.apct_register, name="apct_register"),
@@ -77,8 +83,16 @@ urlpatterns = [
     #account login
     path('accountlogin', views.accountlogin, name="accountlogin"),
     
-    # Add this to urlpatterns
-    path('apct/notifications', views.apctnotifications, name="apctnotifications"),
-    path('staff/updatestatus', views.updateapplicationstatus, name="updateapplicationstatus"),
+    # UPDATED - Keep old names, point to new views
+    path('update_hirestatus/', views.update_application_status, name="update_hirestatus"),
+    path('staff/updatestatus', views.update_application_status, name="update_application_status"),
+
+    
+    # NEW - Additional endpoints for new functionality
+    path('staff/removeapplicant', views.remove_applicant, name="remove_applicant"),
+    # Add these to your urlpatterns
+    path('apct/withdraw-application/', views.withdraw_application, name='withdraw_application'),
+    path('apct/delete-application/', views.delete_application, name='delete_application'),
+    path('apct/jobdetail/<int:id>/', views.apctjobdetail, name="apctjobdetail"),
     
 ]

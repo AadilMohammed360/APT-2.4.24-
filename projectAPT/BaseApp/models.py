@@ -31,9 +31,14 @@ class Vacancy(models.Model):
     vacancyname = models.CharField(max_length=50)
     salary = models.CharField(max_length=30, null=True)
     company = models.CharField(max_length=30, null=True)
-    desc = models.TextField(max_length=150, null=True)
-    qualification = models.TextField(max_length=150, null=True)
+    
+    # SINGLE FIELD for all job detail page content (replaces desc and qualification)
+    content = models.TextField(null=True, blank=True)
+    
     seats = models.BigIntegerField()
+
+    def __str__(self):
+        return self.vacancyname
 
 # NEW MODEL for tracking applications
 class Application(models.Model):

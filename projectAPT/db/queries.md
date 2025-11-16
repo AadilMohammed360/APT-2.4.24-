@@ -1,11 +1,3 @@
-Here are the **complete bulk SQL queries** for all 24 applicant records and their linked login rows, based strictly on the fields and data from your latest screenshot and compatible with your Django models.
-
-***
-
-### 1. Insert into `baseapp_login`  
-*(You may want to tweak the password, these are placeholder values for convenience. Adjust if needed)*
-
-```sql
 INSERT INTO baseapp_login (role, username, email, password) VALUES
 ('admin', 'admin', 'admin@gmail.com', 'Aa.12345'),
 ('applicant', 'anup', 'anup@gmail.com', 'Aa.12345'),
@@ -32,13 +24,7 @@ INSERT INTO baseapp_login (role, username, email, password) VALUES
 ('applicant', 'apct av', 'apctav@gmail.com', 'Aa.12345'),
 ('applicant', 'apct aw', 'apctaw@gmail.com', 'Aa.12345'),
 ('applicant', 'apct ax', 'apctax@gmail.com', 'Aa.12345');
-```
-***
 
-### 2. Insert into `baseapp_applicant`
-*(Adjust log_id_id if your database has different auto-increment behavior, but if you insert login rows as above, IDs should match 1–24)*
-
-```sql
 INSERT INTO baseapp_applicant
 (applicantname, email, contact, address, username, degree, experience, cvpath, log_id_id) VALUES
 ('anup',        'anup@gmail.com',        9567302940, '101, Hariharanagar Street', 'anup',        'M.Tech',    '2', 'cv_base/bn.pdf',     2),
@@ -65,72 +51,105 @@ INSERT INTO baseapp_applicant
 ('apct av',     'apctav@gmail.com',      9567302940, 'asd',                      'apct av',     'BSc',       NULL, 'cv_base/ui.pdf',     23),
 ('apct aw',     'apctaw@gmail.com',      9567302940, 'asd',                      'apct aw',     'BSc',       NULL, 'cv_base/xc.pdf',     24),
 ('apct ax',     'apctax@gmail.com',      9567302940, 'asd',                      'apct ax',     'BSc',       NULL, 'cv_base/yu.pdf',     25);
-```
-
-***
 
 
-These queries will add **all 24 applicants** and their login records, ready for Django and your backend workflow. Just paste them in phpMyAdmin's SQL window, run the login query first, then the applicant query. Update `NULL` as needed for degree/experience, and adjust IDs only if your login table auto-increment setting differs.
-
-If you need the query for other tables (staff, vacancy) or to convert exported CSVs/scripted data perfectly, just ask![1]
-
-Here is the bulk SQL to **add a staff entry and link it via login**, following your model and screenshot (only one row in your current staff table):
-
-***
-
-### Insert Staff Login
-
-```sql
 INSERT INTO baseapp_login (role, username, email, password)
 VALUES ('staff', 'staff ab', 'staffab@gmail.com', 'Aa.12345');
-```
 
-***
-
-### Insert Staff Record
-
-After inserting, find the auto-assigned `id` for this staff row in `baseapp_login` (in your screenshot it is `44`). Use that ID for `log_id_id`.
-
-```sql
 INSERT INTO baseapp_staff
 (staffname, email, contact, workplace, username, log_id_id)
 VALUES
 ('staff ab', 'staffab@gmail.com', 9567302940, 'dummy', 'staff ab', 26);
-```
 
-***
+INSERT INTO baseapp_vacancy (vacancyname, seats, company, salary, content) VALUES
+('Software Engineer', 3, 'ABC Corporation', '$250k', 
+'<h2>Job Description</h2>
+<p>We are seeking a talented Software Engineer to join our dynamic team. You will be responsible for designing, developing, and maintaining software applications that meet our clients'' needs.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>B.Tech in Computer Science or related field</li>
+<li>M.Tech preferred</li>
+<li>Strong programming skills in Java, Python, or C++</li>
+<li>Experience with Agile development methodologies</li>
+</ul>'),
 
-**Note:**  
-- Always insert the login record first, check the login table, then use the correct ID in the staff table.  
-- If you have more staff, repeat with a login insert and matching staff insert for each one.
-- You can run both queries together in phpMyAdmin, or batched for multiple staff.
+('Data Scientist', 4, 'XYZ Technologies', '$280k', 
+'<h2>Job Description</h2>
+<p>Join our data analytics team to transform raw data into actionable insights. You will work with large datasets, build predictive models, and present findings to stakeholders.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>BSc or MSc in Statistics, Mathematics, or Computer Science</li>
+<li>MCA degree holders welcome</li>
+<li>Proficiency in Python, R, and SQL</li>
+<li>Experience with machine learning frameworks</li>
+</ul>'),
 
-This guarantees correct foreign key links between your actual Django tables. If you add more staff, repeat the pattern (login first, then staff record with correct log_id_id).[1]
+('Web Developer', 8, 'PQR Solutions', '$300k', 
+'<h2>Job Description</h2>
+<p>We need a skilled Web Developer to create responsive and user-friendly websites. You will work on both frontend and backend development, ensuring seamless user experiences.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>BCA, MCA, or B.Tech in Computer Science</li>
+<li>Strong knowledge of HTML, CSS, JavaScript</li>
+<li>Experience with React, Angular, or Vue.js</li>
+<li>Understanding of backend technologies (Node.js, Django, Flask)</li>
+</ul>'),
 
-Absolutely! Here is the bulk SQL (based on your previous applicant records) for **vacancies** and their corresponding **application records** (1 application per applicant, mapping to the first vacancy as an example). Adjust the mapping if you want a different job per applicant.
+('Database Administrator', 5, 'GHI Enterprises', '$280k', 
+'<h2>Job Description</h2>
+<p>Maintain and optimize our database systems to ensure high performance, security, and availability. You will handle database backups, recovery, and performance tuning.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>MCA, BCA, or B.Tech degree</li>
+<li>Strong knowledge of MySQL, PostgreSQL, or Oracle</li>
+<li>Experience with database optimization techniques</li>
+<li>Understanding of database security principles</li>
+</ul>'),
 
-***
+('Network Engineer', 9, 'JKL Technologies', '$290k', 
+'<h2>Job Description</h2>
+<p>Design, implement, and maintain our network infrastructure. You will troubleshoot network issues, configure routers and switches, and ensure network security.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>B.Tech or M.Sc in Computer Networks or related field</li>
+<li>CCNA or CCNP certification preferred</li>
+<li>Experience with Cisco, Juniper networking equipment</li>
+<li>Knowledge of firewall configuration and VPN setup</li>
+</ul>'),
 
-### 1. Vacancy Table (8 sample rows, adjust as needed):
+('Research Analyst', 90, 'MNO Corporation', '$250k', 
+'<h2>Job Description</h2>
+<p>Conduct research and analysis on market trends, competitor activities, and industry developments. Prepare detailed reports and presentations for management.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>BSc, MSc, or M.A in relevant field</li>
+<li>Strong analytical and critical thinking skills</li>
+<li>Excellent written and verbal communication</li>
+<li>Proficiency in MS Excel and data analysis tools</li>
+</ul>'),
 
-```sql
-INSERT INTO baseapp_vacancy (vacancyname, seats, company, salary, desc, qualification) VALUES
-('Software Engineer', 3, 'ABC Corporation', '250', 'Dolor justo tempor duo ipsum accusam rebum gubergren erat.', 'B.Tech, M.Tech'),
-('Data Scientist', 4, 'XYZ Technologies', '280', 'Data analytics role.', 'BSc, MSc, MCA'),
-('Web Developer', 8, 'PQR Solutions', '300', 'Frontend and backend web development.', 'BCA, MCA, B.Tech'),
-('Database Administrator', 5, 'GHI Enterprises', '280', 'DB maintenance and optimization.', 'MCA, BCA, B.Tech'),
-('Network Engineer', 9, 'JKL Technologies', '290', 'Networking and system support.', 'B.Tech, M.Sc'),
-('Research Analyst', 90, 'MNO Corporation', '250', 'Research and reporting.', 'BSc, MSc, M.A'),
-('HR Manager', 2, 'LMN Solutions', '220', 'HR and recruitment tasks.', 'MBA, MHRM'),
-('QA Tester', 6, 'DEF Innovations', '200', 'Software QA/testing.', 'BCA, MCA');
-```
+('HR Manager', 2, 'LMN Solutions', '$220k', 
+'<h2>Job Description</h2>
+<p>Lead our human resources department, managing recruitment, employee relations, performance management, and HR policy implementation.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>MBA or MHRM degree required</li>
+<li>5+ years of HR management experience</li>
+<li>Strong knowledge of labor laws and HR best practices</li>
+<li>Excellent interpersonal and leadership skills</li>
+</ul>'),
 
-***
+('QA Tester', 6, 'DEF Innovations', '$200k', 
+'<h2>Job Description</h2>
+<p>Ensure software quality through comprehensive testing. You will create test plans, execute test cases, identify bugs, and work with developers to resolve issues.</p>
+<h2>Qualifications</h2>
+<ul>
+<li>BCA or MCA degree</li>
+<li>Experience with manual and automated testing</li>
+<li>Knowledge of testing tools (Selenium, JUnit, TestNG)</li>
+<li>Strong attention to detail and analytical skills</li>
+</ul>');
 
-### 2. Application Table  
-**Each applicant applies to the first vacancy (`vacancy_id = 1`). Status set to 'NOT_APPLIED' for initial setup.**
-
-```sql
 INSERT INTO baseapp_application (applicant_id, vacancy_id, status, applied_date, status_updated_date, notes, ml_score) VALUES
 (1, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
 (2, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
@@ -156,55 +175,3 @@ INSERT INTO baseapp_application (applicant_id, vacancy_id, status, applied_date,
 (22, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
 (23, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
 (24, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL);
-```
-
-***
-
-### If you want each applicant mapped to a different job:
-
-Just change the `vacancy_id` (e.g., `(1, 1,...)`, `(2, 2,...)`, ..., `(8, 8,...)`) or duplicate applications for many-to-many mapping as needed.
-
-***
-
-#### Key Notes
-- `applicant_id = 1..24` as previously inserted.
-- `vacancy_id` must match your actual auto-increment IDs from the vacancy table.
-- `NOW()` sets current timestamp; use a real date if importing historical data.
-
-If you want real historical mapping, multiple jobs per applicant, or specific statuses (e.g. "APPLIED"), just let me know your preferred structure! This structure avoids any foreign key errors and gets your dashboard working instantly.
-
-
-
-
-The error is because `desc` is a **reserved keyword** in SQL.
-
-#### Solution:  
-- You must enclose it in backticks:  
-  **\`desc\`**
-
-***
-
-### Here is the corrected `baseapp_vacancy` insert query:
-
-```sql
-INSERT INTO baseapp_vacancy (vacancyname, seats, company, salary, `desc`, qualification) VALUES
-('Software Engineer', 3, 'ABC Corporation', '250', 'Dolor justo tempor duo ipsum accusam rebum gubergren erat.', 'B.Tech, M.Tech'),
-('Data Scientist', 4, 'XYZ Technologies', '280', 'Data analytics role.', 'BSc, MSc, MCA'),
-('Web Developer', 8, 'PQR Solutions', '300', 'Frontend and backend web development.', 'BCA, MCA, B.Tech'),
-('Database Administrator', 5, 'GHI Enterprises', '280', 'DB maintenance and optimization.', 'MCA, BCA, B.Tech'),
-('Network Engineer', 9, 'JKL Technologies', '290', 'Networking and system support.', 'B.Tech, M.Sc'),
-('Research Analyst', 90, 'MNO Corporation', '250', 'Research and reporting.', 'BSc, MSc, M.A'),
-('HR Manager', 2, 'LMN Solutions', '220', 'HR and recruitment tasks.', 'MBA, MHRM'),
-('QA Tester', 6, 'DEF Innovations', '200', 'Software QA/testing.', 'BCA, MCA');
-```
-
-**This will now work in phpMyAdmin and matches your Django model schema.**
-
-***
-
-If you want application table records too, just clarify the applicant-to-vacancy mapping you want for your bulk `Application` insert.
-
-```sql
-UPDATE `baseapp_application` SET `status`='APPLIED' WHERE `status`='NOT_APPLIED';
-
-```

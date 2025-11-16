@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'BaseApp.apps.BaseappConfig'
+    'BaseApp',
 ]
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -82,8 +84,8 @@ DATABASES = {
         'PASSWORD':'',
         'USER':'root',
         'HOST':'localhost',
-        # 'PORT': '3306',
-        'PORT': '3307',
+        'PORT': '3306',
+        # 'PORT': '3307',
         'OPTIONS': {
             'sql_mode': 'STRICT_TRANS_TABLES',
         },

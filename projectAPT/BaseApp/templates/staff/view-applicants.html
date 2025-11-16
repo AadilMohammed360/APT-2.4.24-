@@ -1,0 +1,78 @@
+{% extends "staff/stafflayout.html" %}
+{% load static %}
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container-xxl py-5 bg-dark page-header mb-5">
+    <div class="container my-5 pt-5 pb-4">
+        <h1 class="display-3 text-white mb-3 animated slideInDown">View Applicants</h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb text-uppercase">
+                <li class="breadcrumb-item"><a href="{% url 'staffwelcome' %}">Home</a></li>
+                <li class="breadcrumb-item text-white active" aria-current="page">Applicants</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Messages -->
+{% if messages %}
+<div class="container-xxl">
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <!-- SEARCH BOX FOR KEYWORD FILTERING -->
+        <div class="row g-5 mb-4">
+            <div class="col-lg-12">
+                <form method="POST" action="{% url 'stafffilterCV' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="inputkey" 
+                                   placeholder="Search by keywords (comma-separated, e.g., Python, Django, React)"
+                                   required>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="vacancy_id">
+                                <option value="">All Vacancies</option>
+                                {% for vacancy in vacancies %}
+                                    <option value="{{ vacancy.id }}">{{ vacancy.vacancyname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-primary w-100" type="submit">
+                                <i class="fa fa-search me-2"></i>Filter by Keywords (ML)
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- APPLICANTS TABLE -->
+        <div class="row g-5">
+            <div class="col-lg-12">
+                <h4 class="mb-3">All Applications</h4>
+                <div class="table-responsive">
+                    {% include "staff/apcttable.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -99,20 +99,6 @@ def staffwelcome(request):
 def staffvacancies(request):
     vacancydata = Vacancy.objects.all()    
     return render(request, 'staff/vacancies.html',{'vacancydata':vacancydata,})
-def registervacancy(request):
-    if(request.method=='POST'):
-        vacancyname=request.POST['vacancyname']
-        seat=request.POST['seat']
-        company=request.POST['company']
-        salary=request.POST['salary']
-        description=request.POST['desc']
-        qual=request.POST['qualification']
-
-
-        data=Vacancy(vacancyname=vacancyname,seats=seat,company=company,salary=salary,desc=description,qualification=qual)
-        data.save()
-     
-        return redirect('staffvacancies')
 
 def uploadCV(request):
     if (request.method == "POST"):
@@ -139,47 +125,47 @@ def uploadCV(request):
         uploaded_cv.save()
 
     return redirect('apctviewaccount');    
-def updatevacancy(request):
-    if(request.method=='POST'):
-        record_id  = request.POST['recordid']
 
-        vacancyname=request.POST['newvacancyname']
-        seat=request.POST['newseat']
-        company  = request.POST['newcompany']
-        salary  = request.POST['newsalary']
-        desc  = request.POST['newdesc']
-        qual  = request.POST['newqualification']
-        print(record_id)
-
-        record=Vacancy.objects.get(id=record_id)
-        record.vacancyname = vacancyname
-        record.seats = seat
-        record.company = company
-        record.salary  = salary
-        record.desc = desc
-        record.Qualification = qual
-        record.save()        
+def registervacancy(request):
+    if request.method == 'POST':
+        vacancyname = request.POST.get('vacancyname')
+        seat = request.POST.get('seat')
+        company = request.POST.get('company')
+        salary = request.POST.get('salary')
+        content = request.POST.get('content')  # Changed from desc and qualification
+        
+        vacancy = Vacancy(
+            vacancyname=vacancyname,
+            seats=seat,
+            company=company,
+            salary=salary,
+            content=content  # Single field
+        )
+        vacancy.save()
+        
+        messages.success(request, 'Vacancy added successfully')
         return redirect('staffvacancies')
     
+    return redirect('staffvacancies')
 
-def stafffilterCV(request):
-    inputkey = request.POST['inputkey']
-    print(inputkey)
-    word_list = inputkey.split(',')
-    print(f"keywords: {word_list}")
-    # degree_key = word_list[0]
-    # print(word_list)
-    # print(degree_key)
-    searchbykey = keyword_miner(word_list)
-    # searchbydegree = ug_pg_miner(degree_key.upper())
-    print(f"ML RESULT: {searchbykey}")
-    # searchbydegree = ug_pg_miner(degree_key)
-    # print(searchbykey,searchbydegree)
-    apctdata = Applicant.objects.all()
-    # return render(request, 'staff/welcome.html',{'apctdata':apctdata})
-    return render(request, 'staff/filter applicants.html',{'apctdata':apctdata,'searchbykey':searchbykey,})
-    # return render(request, 'staff/filter applicants.html',{'apctdata':apctdata,'searchbykey':searchbykey,'searchbydegree':searchbydegree,})
-
+def updatevacancy(request):
+    if request.method == 'POST':
+        recordid = request.POST.get('recordid')
+        vacancy = Vacancy.objects.get(id=recordid)
+        
+        vacancy.vacancyname = request.POST.get('newvacancyname')
+        vacancy.seats = request.POST.get('newseat')
+        vacancy.company = request.POST.get('newcompany')
+        vacancy.salary = request.POST.get('newsalary')
+        vacancy.content = request.POST.get('newcontent')  # Single field
+        
+        vacancy.save()
+        
+        messages.success(request, 'Vacancy updated successfully')
+        return redirect('staffvacancies')
+    
+    return redirect('staffvacancies')
+  
 
 
 def staffpage404(request):
@@ -439,7 +425,7 @@ def jobapply(request):
         if request.method == 'GET':
             # Get the data from the query parameters
 
-            sid=request.session['log_id'];
+            sid=request.session['log_id']
             apctdata=Applicant.objects.get(log_id=sid)
 
             # Process the data (e.g., save it to a database)
@@ -451,21 +437,465 @@ def jobapply(request):
     
     
 # new views from claude
+# from django.shortcuts import render
+# from .models import Applicant, Application, Vacancy
 
-# Add this view function
+# def stafffilterCV(request):
+#     """
+#     Filter applicants by keywords using CV parsing.
+#     Works with the new Application model structure.
+#     """
+#     if request.method == 'POST':
+#         inputkey = request.POST.get('inputkey', '')
+#         vacancy_id = request.POST.get('vacancy_id', None)
+        
+#         print(f"Input keywords: {inputkey}")
+        
+#         # Parse keywords
+#         word_list = [word.strip() for word in inputkey.split(',') if word.strip()]
+#         print(f"Parsed keywords: {word_list}")
+        
+#         # Run ML keyword mining - returns {applicant_id: match_count}
+#         ml_results = keyword_miner(word_list)
+#         print(f"ML RESULT: {ml_results}")
+        
+#         # Get all applicants
+#         applicants = Applicant.objects.all()
+        
+#         # Build enriched applicant data
+#         applicant_data = []
+#         for applicant in applicants:
+#             # Get ML match score
+#             ml_score = ml_results.get(applicant.id, 0)
+            
+#             # Get applications for this applicant
+#             if vacancy_id:
+#                 applications = Application.objects.filter(
+#                     applicant=applicant,
+#                     vacancy_id=vacancy_id
+#                 ).select_related('vacancy')
+#             else:
+#                 applications = Application.objects.filter(
+#                     applicant=applicant
+#                 ).select_related('vacancy')
+            
+#             # Build data dict
+#             applicant_info = {
+#                 'applicant': applicant,
+#                 'ml_score': ml_score,
+#                 'applications': applications,
+#                 'total_applications': applications.count(),
+#                 'has_cv': bool(applicant.cvpath),
+#             }
+            
+#             applicant_data.append(applicant_info)
+        
+#         # Sort by ML score (highest first), then by name
+#         applicant_data.sort(key=lambda x: (-x['ml_score'], x['applicant'].applicantname))
+        
+#         # Get all vacancies for filter dropdown
+#         vacancies = Vacancy.objects.all()
+        
+#         context = {
+#             'applicant_data': applicant_data,
+#             'searchbykey': ml_results,  # Keep for backward compatibility
+#             'vacancies': vacancies,
+#             'selected_vacancy_id': vacancy_id,
+#             'keywords': inputkey,
+#             'total_matches': len(ml_results),
+#         }
+        
+#         return render(request, 'staff/filter applicants.html', context)
+    
+#     else:
+#         # GET request - show all applicants
+#         applicants = Applicant.objects.all()
+#         vacancies = Vacancy.objects.all()
+        
+#         applicant_data = []
+#         for apct in applicants:
+#             applications = Application.objects.filter(applicant=apct).select_related('vacancy')
+#             applicant_data.append({
+#                 'applicant': apct,
+#                 'ml_score': 0,
+#                 'applications': applications,
+#                 'total_applications': applications.count(),
+#                 'has_cv': bool(apct.cvpath),
+#             })
+        
+#         context = {
+#             'applicant_data': applicant_data,
+#             'vacancies': vacancies,
+#         }
+        
+#         return render(request, 'staff/filter applicants.html', context)
+
+
+# # Add this view function
+# def apctnotifications(request):
+#     if 'log_id' not in request.session:
+#         return redirect('login')
+    
+#     log_id = request.session.get('log_id')
+#     applicant = Applicant.objects.get(log_id=log_id)
+    
+#     # Get all applications for this applicant
+#     applications = Application.objects.filter(applicant=applicant).select_related('vacancy')
+    
+#     # Group by status for better visualization
+#     active_applications = applications.exclude(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
+#     completed_applications = applications.filter(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
+    
+#     context = {
+#         'applications': applications,
+#         'active_applications': active_applications,
+#         'completed_applications': completed_applications,
+#         'total_applications': applications.count(),
+#         'active_count': active_applications.count()
+#     }
+    
+#     return render(request, 'applicant/notifications.html', context)
+
+# # Update existing applyaction view to create Application record
+# def applyaction(request):
+#     if 'log_id' not in request.session:
+#         return redirect('login')
+    
+#     log_id = request.session.get('log_id')
+#     vacancy_id = request.POST.get('vacancy_id')
+    
+#     applicant = Applicant.objects.get(log_id=log_id)
+#     vacancy = Vacancy.objects.get(id=vacancy_id)
+    
+#     # Create Application record
+#     Application.objects.create(
+#         applicant=applicant,
+#         vacancy=vacancy,
+#         status='APPLIED'
+#     )
+    
+#     return redirect('apctjoblist')
+
+# # Update staff view to change application status
+# from .models import Application
+
+# def viewapplicants(request):
+#     return render(request, 'staff/view applicants.html')
+
+# def staffviewapplicants(request):
+#     # Fetch all Application objects, with related Applicant and Vacancy
+#     applications = Application.objects.select_related('applicant', 'vacancy').all()
+#     return render(request, 'staff/view applicants.html', {'applications': applications})
+
+
+# def update_hirestatus(request):
+#         if request.method == 'GET':
+#             # Get the data from the query parameters
+#             hiringstatus = request.GET['hire_status']
+#             apctid = request.GET['apctid']
+#             print(hiringstatus)
+#             print(apctid)
+
+#             # Process the data (e.g., save it to a database)
+#             # Your processing logic here...
+
+#             apctdata = Applicant.objects.get(id=apctid)
+#             apctdata.hirestatus = hiringstatus
+#             apctdata.save()
+
+
+#         apctdata = Applicant.objects.all()
+#         return render(request, 'staff/view applicants.html',{'apctdata':apctdata,})
+
+# def updateapplicationstatus(request):
+#     if 'log_id' not in request.session:
+#         return redirect('login')
+    
+#     application_id = request.POST.get('application_id')
+#     new_status = request.POST.get('status')
+#     notes = request.POST.get('notes', '')
+    
+#     application = Application.objects.get(id=application_id)
+#     application.status = new_status
+#     if notes:
+#         application.notes = notes
+#     application.save()
+    
+#     return redirect('staffviewapplicants')
+
+
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from .models import Applicant, Application, Vacancy, Staff, Login
+import os
+from PyPDF2 import PdfReader
+
+
+# ============================================
+# ML KEYWORD MINING FUNCTION
+# ============================================
+
+def keyword_miner(pred_keywords):
+    """
+    Search CVs for keywords and return applicant IDs with match scores.
+    Returns: dict {applicant_id: match_count}
+    """
+    directory = 'media/cv_base'
+    results = {}
+    
+    def extract_applicant_id_from_filename(filename):
+        """Extract applicant ID from CV filename by matching CV path."""
+        try:
+            applicant = Applicant.objects.filter(cvpath__icontains=filename).first()
+            if applicant:
+                return applicant.id
+        except:
+            pass
+        return None
+    
+    if not os.path.exists(directory):
+        print(f"Directory {directory} does not exist")
+        return {}
+    
+    for filename in os.listdir(directory):
+        if filename.endswith('.pdf'):
+            applicant_id = extract_applicant_id_from_filename(filename)
+            if not applicant_id:
+                continue
+            
+            match_count = 0
+            filepath = os.path.join(directory, filename)
+            
+            try:
+                with open(filepath, 'rb') as file:
+                    reader = PdfReader(file)
+                    full_text = ""
+                    
+                    # Extract all text from PDF
+                    for page in reader.pages:
+                        full_text += page.extract_text().lower()
+                    
+                    # Count keyword matches
+                    for keyword in pred_keywords:
+                        if keyword.lower() in full_text:
+                            match_count += 1
+                    
+                    # Only add if at least one keyword matched
+                    if match_count > 0:
+                        results[applicant_id] = match_count
+            
+            except Exception as e:
+                print(f"Error reading {filename}: {e}")
+                continue
+    
+    return results
+
+
+# ============================================
+# STAFF VIEWS - APPLICANT MANAGEMENT
+# ============================================
+
+def stafffilterCV(request):
+    """
+    Filter applicants by keywords using CV parsing with ML.
+    Supports vacancy filtering and ML scoring.
+    """
+    if request.method == 'POST':
+        inputkey = request.POST.get('inputkey', '')
+        vacancy_id = request.POST.get('vacancy_id', None)
+        
+        print(f"Input keywords: {inputkey}")
+        
+        # Parse keywords
+        word_list = [word.strip() for word in inputkey.split(',') if word.strip()]
+        print(f"Parsed keywords: {word_list}")
+        
+        # Run ML keyword mining - returns {applicant_id: match_count}
+        ml_results = keyword_miner(word_list)
+        print(f"ML RESULT: {ml_results}")
+        
+        # Get all applicants
+        applicants = Applicant.objects.all()
+        
+        # Build enriched applicant data
+        applicant_data = []
+        for applicant in applicants:
+            # Get ML match score
+            ml_score = ml_results.get(applicant.id, 0)
+            
+            # Get applications for this applicant
+            if vacancy_id:
+                applications = Application.objects.filter(
+                    applicant=applicant,
+                    vacancy_id=vacancy_id
+                ).select_related('vacancy')
+            else:
+                applications = Application.objects.filter(
+                    applicant=applicant
+                ).select_related('vacancy')
+            
+            # Build data dict
+            applicant_info = {
+                'applicant': applicant,
+                'ml_score': ml_score,
+                'applications': applications,
+                'total_applications': applications.count(),
+                'has_cv': bool(applicant.cvpath),
+            }
+            
+            applicant_data.append(applicant_info)
+        
+        # Sort by ML score (highest first), then by name
+        applicant_data.sort(key=lambda x: (-x['ml_score'], x['applicant'].applicantname))
+        
+        # Get all vacancies for filter dropdown
+        vacancies = Vacancy.objects.all()
+        
+        context = {
+            'applicant_data': applicant_data,
+            'searchbykey': ml_results,
+            'vacancies': vacancies,
+            'selected_vacancy_id': vacancy_id,
+            'keywords': inputkey,
+            'total_matches': len(ml_results),
+        }
+        
+        return render(request, 'staff/filter-applicants.html', context)
+    
+    else:
+        # GET request - show all applicants
+        applicants = Applicant.objects.all()
+        vacancies = Vacancy.objects.all()
+        
+        applicant_data = []
+        for apct in applicants:
+            applications = Application.objects.filter(applicant=apct).select_related('vacancy')
+            applicant_data.append({
+                'applicant': apct,
+                'ml_score': 0,
+                'applications': applications,
+                'total_applications': applications.count(),
+                'has_cv': bool(apct.cvpath),
+            })
+        
+        context = {
+            'applicant_data': applicant_data,
+            'vacancies': vacancies,
+        }
+        
+        return render(request, 'staff/filter-applicants.html', context)
+
+
+def staffviewapplicants(request):
+    """View all applications with applicant and vacancy details."""
+    applications = Application.objects.select_related(
+        'applicant', 
+        'vacancy'
+    ).order_by('-applied_date')
+    
+    vacancies = Vacancy.objects.all()  # ADD THIS LINE
+    
+    context = {
+        'applications': applications,
+        'vacancies': vacancies,  # ADD THIS LINE
+    }
+    
+    return render(request, 'staff/view-applicants.html', context)
+
+
+
+def update_application_status(request):
+    """Update the status of an application."""
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        new_status = request.POST.get('status')
+        notes = request.POST.get('notes', '')
+        
+        try:
+            application = Application.objects.get(id=application_id)
+            application.status = new_status
+            if notes:
+                application.notes = notes
+            application.save()
+            messages.success(request, 'Application status updated successfully')
+        except Application.DoesNotExist:
+            messages.error(request, 'Application not found')
+        except Exception as e:
+            messages.error(request, f'Error updating status: {str(e)}')
+    
+    # Get the referrer to redirect back
+    referrer = request.META.get('HTTP_REFERER')
+    if referrer and 'filtercv' in referrer.lower():
+        return redirect('stafffilterCV')
+    else:
+        return redirect('staffviewapplicants')
+
+
+def remove_applicant(request):
+    """Remove/delete an applicant from the system (handles both old and new formats)."""
+    
+    # Handle both GET (old format) and POST (new format)
+    if request.method == 'GET':
+        applicant_id = request.GET.get('delid')  # Old format
+    else:  # POST
+        applicant_id = request.POST.get('applicant_id')  # New format
+    
+    if not applicant_id:
+        messages.error(request, 'No applicant specified for removal')
+        return redirect('staffviewapplicants')
+    
+    try:
+        applicant = get_object_or_404(Applicant, id=applicant_id)
+        applicant_name = applicant.applicantname
+        
+        # Delete the applicant (cascade will delete related applications)
+        applicant.delete()
+        
+        messages.success(request, f'Applicant {applicant_name} has been removed successfully')
+    except Exception as e:
+        messages.error(request, f'Error removing applicant: {str(e)}')
+    
+    # Get the referrer to redirect back
+    referrer = request.META.get('HTTP_REFERER', '')
+    if 'filtercv' in referrer.lower() or 'filter' in referrer.lower():
+        return redirect('stafffilterCV')
+    else:
+        return redirect('staffviewapplicants')
+
+
+# ============================================
+# APPLICANT VIEWS
+# ============================================
+
 def apctnotifications(request):
+    """View application status notifications for logged-in applicant."""
     if 'log_id' not in request.session:
         return redirect('login')
     
     log_id = request.session.get('log_id')
-    applicant = Applicant.objects.get(log_id=log_id)
+    try:
+        applicant = Applicant.objects.get(log_id=log_id)
+    except Applicant.DoesNotExist:
+        messages.error(request, 'Applicant not found')
+        return redirect('login')
     
     # Get all applications for this applicant
-    applications = Application.objects.filter(applicant=applicant).select_related('vacancy')
+    applications = Application.objects.filter(
+        applicant=applicant
+    ).select_related('vacancy').order_by('-applied_date')
     
     # Group by status for better visualization
-    active_applications = applications.exclude(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
-    completed_applications = applications.filter(status__in=['HIRED', 'REJECTED', 'WITHDRAWN'])
+    active_applications = applications.exclude(
+        status__in=['HIRED', 'REJECTED', 'WITHDRAWN']
+    )
+    completed_applications = applications.filter(
+        status__in=['HIRED', 'REJECTED', 'WITHDRAWN']
+    )
     
     context = {
         'applications': applications,
@@ -477,69 +907,123 @@ def apctnotifications(request):
     
     return render(request, 'applicant/notifications.html', context)
 
-# Update existing applyaction view to create Application record
+
 def applyaction(request):
+    """Handle job application submission."""
     if 'log_id' not in request.session:
+        messages.error(request, 'Please login to apply for jobs')
         return redirect('login')
     
-    log_id = request.session.get('log_id')
-    vacancy_id = request.POST.get('vacancy_id')
+    if request.method == 'POST':
+        log_id = request.session.get('log_id')
+        vacancy_id = request.POST.get('vacancy_id')
+        
+        try:
+            applicant = Applicant.objects.get(log_id=log_id)
+            vacancy = Vacancy.objects.get(id=vacancy_id)
+            
+            # Check if already applied by checking appliedpost field
+            if applicant.appliedpost and str(vacancy_id) in applicant.appliedpost:
+                messages.warning(request, f'You have already applied for {vacancy.vacancyname}')
+            else:
+                # Append to appliedpost field (comma-separated IDs)
+                if applicant.appliedpost:
+                    applicant.appliedpost += f",{vacancy_id}"
+                else:
+                    applicant.appliedpost = str(vacancy_id)
+                
+                applicant.save()
+                messages.success(request, f'Successfully applied for {vacancy.vacancyname}!')
+        
+        except Applicant.DoesNotExist:
+            messages.error(request, 'Applicant not found')
+        except Vacancy.DoesNotExist:
+            messages.error(request, 'Job vacancy not found')
+        except Exception as e:
+            messages.error(request, 'Error submitting application')
+            print(f"Error: {str(e)}")
     
-    applicant = Applicant.objects.get(log_id=log_id)
-    vacancy = Vacancy.objects.get(id=vacancy_id)
-    
-    # Create Application record
-    Application.objects.create(
-        applicant=applicant,
-        vacancy=vacancy,
-        status='APPLIED'
-    )
-    
-    return redirect('apctjoblist')
+    return redirect('apctcategory')
 
-# Update staff view to change application status
-from .models import Application
+def withdraw_application(request):
+    """Allow applicant to withdraw their application."""
+    if 'log_id' not in request.session:
+        messages.error(request, 'Please login first')
+        return redirect('login')
+    
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        
+        try:
+            log_id = request.session.get('log_id')
+            applicant = Applicant.objects.get(log_id=log_id)
+            
+            # Get application and verify ownership
+            application = Application.objects.get(
+                id=application_id,
+                applicant=applicant
+            )
+            
+            # Can only withdraw if status is APPLIED, UNDER_REVIEW, or SHORTLISTED
+            if application.status in ['APPLIED', 'UNDER_REVIEW', 'SHORTLISTED']:
+                application.status = 'WITHDRAWN'
+                application.save()
+                messages.success(request, f'Application for {application.vacancy.vacancyname} withdrawn successfully')
+            else:
+                messages.warning(request, 'This application cannot be withdrawn')
+        
+        except Application.DoesNotExist:
+            messages.error(request, 'Application not found')
+        except Applicant.DoesNotExist:
+            messages.error(request, 'Applicant not found')
+        except Exception as e:
+            messages.error(request, f'Error: {str(e)}')
+    
+    return redirect('apctnotifications')
+
+
+def delete_application(request):
+    """Delete application (only for WITHDRAWN or REJECTED status)."""
+    if 'log_id' not in request.session:
+        messages.error(request, 'Please login first')
+        return redirect('login')
+    
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        
+        try:
+            log_id = request.session.get('log_id')
+            applicant = Applicant.objects.get(log_id=log_id)
+            
+            # Get application and verify ownership
+            application = Application.objects.get(
+                id=application_id,
+                applicant=applicant
+            )
+            
+            # Can only delete if status is WITHDRAWN or REJECTED
+            if application.status in ['WITHDRAWN', 'REJECTED']:
+                vacancy_name = application.vacancy.vacancyname
+                application.delete()
+                messages.success(request, f'Application for {vacancy_name} deleted successfully')
+            else:
+                messages.warning(request, 'Only withdrawn or rejected applications can be deleted')
+        
+        except Application.DoesNotExist:
+            messages.error(request, 'Application not found')
+        except Applicant.DoesNotExist:
+            messages.error(request, 'Applicant not found')
+        except Exception as e:
+            messages.error(request, f'Error: {str(e)}')
+    
+    return redirect('apctnotifications')
+
+
+
+# ============================================
+# LEGACY/COMPATIBILITY VIEWS (Keep if needed)
+# ============================================
 
 def viewapplicants(request):
-    return render(request, 'staff/view applicants.html')
-
-def staffviewapplicants(request):
-    # Fetch all Application objects, with related Applicant and Vacancy
-    applications = Application.objects.select_related('applicant', 'vacancy').all()
-    return render(request, 'staff/view applicants.html', {'applications': applications})
-
-
-def update_hirestatus(request):
-        if request.method == 'GET':
-            # Get the data from the query parameters
-            hiringstatus = request.GET['hire_status']
-            apctid = request.GET['apctid']
-            print(hiringstatus)
-            print(apctid)
-
-            # Process the data (e.g., save it to a database)
-            # Your processing logic here...
-
-            apctdata = Applicant.objects.get(id=apctid)
-            apctdata.hirestatus = hiringstatus
-            apctdata.save()
-
-
-        apctdata = Applicant.objects.all()
-        return render(request, 'staff/view applicants.html',{'apctdata':apctdata,})
-
-def updateapplicationstatus(request):
-    if 'log_id' not in request.session:
-        return redirect('login')
-    
-    application_id = request.POST.get('application_id')
-    new_status = request.POST.get('status')
-    notes = request.POST.get('notes', '')
-    
-    application = Application.objects.get(id=application_id)
-    application.status = new_status
-    if notes:
-        application.notes = notes
-    application.save()
-    
+    """Legacy view - redirects to staff view applicants."""
     return redirect('staffviewapplicants')
