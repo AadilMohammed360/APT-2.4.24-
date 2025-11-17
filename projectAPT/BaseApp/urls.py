@@ -35,7 +35,7 @@ urlpatterns = [
     path('apct/passwordupdate', views.apctpasswordupdate, name="apctpasswordupdate"),
     path('apct/profileupdate', views.apctprofileupdate, name="apctprofileupdate"),
     path('apct/testimonial', views.apcttestimonial, name="apcttestimonial"),
-    path('apct/jobapply', views.jobapply, name="jobapply"),
+    # path('apct/jobapply', views.jobapply, name="jobapply"),
     
     # NEW - Applicant notifications (keep new)
     path('apct/notifications', views.apctnotifications, name="apctnotifications"),

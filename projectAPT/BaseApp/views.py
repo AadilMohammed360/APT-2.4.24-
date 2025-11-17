@@ -290,7 +290,6 @@ def apct_register(request):
         address = request.POST['address']
         username = request.POST['username']
         password  = request.POST['password']
-        # hirestatus = request.POST['hirestatus']
 
         role = request.POST['role']
         # database save logic
@@ -298,7 +297,7 @@ def apct_register(request):
         login.save()
         data=Applicant(applicantname=applicantname,
                        email=email,contact=contact,address=address,
-                       username=username,hirestatus= "waiting" ,cvpath="cv_base/df.pdf",
+                       username=username,cvpath="cv_base/df.pdf",
                        log_id=login)
         data.save()        
     return redirect('index')
@@ -384,6 +383,8 @@ def accountlogin(request):
         try:
             # Try to retrieve the specific record
             logindata = Login.objects.get(username=username,password=password)
+            login=logindata
+            print(f"ID: {login.id}, Username: {login.username}, Role: {login.role}")
             # Use except on default exception where the object u tried to retrieve do not exist
         except Login.DoesNotExist:
             # Handle the case where the specific record is not found
@@ -408,32 +409,8 @@ def accountlogin(request):
     return render(request,'login.html',)
 
 
-def apctjobdetail(request):
-        if request.method == 'GET':
-            # Get the data from the query parameters
-            vacancyid = request.GET['vacancyid']
-            print(vacancyid)
 
-            # Process the data (e.g., save it to a database)
-            # Your processing logic here...
 
-            vdata = Vacancy.objects.get(id=vacancyid)
-
-        return render(request, 'applicant/jobdetail.html',{'vdata':vdata,})
-
-def jobapply(request):
-        if request.method == 'GET':
-            # Get the data from the query parameters
-
-            sid=request.session['log_id']
-            apctdata=Applicant.objects.get(log_id=sid)
-
-            # Process the data (e.g., save it to a database)
-            # Your processing logic here...
-
-            apctdata.appliedpost = request.GET['appliedpost']
-            apctdata.save()
-        return redirect('apctcategory')
     
     
 # new views from claude
@@ -908,6 +885,33 @@ def apctnotifications(request):
     return render(request, 'applicant/notifications.html', context)
 
 
+def apctjobdetail(request, id):
+    try:
+        vdata = Vacancy.objects.get(id=id)
+        
+        # Check if user is logged in and has already applied
+        has_applied = False
+        if 'log_id' in request.session:
+            log_id = request.session.get('log_id')
+            try:
+                applicant = Applicant.objects.get(log_id=log_id)
+                # Check if application exists using Application model
+                has_applied = Application.objects.filter(
+                    applicant=applicant,
+                    vacancy=vdata
+                ).exists()
+            except Applicant.DoesNotExist:
+                pass
+        
+        return render(request, 'applicant/jobdetail.html', {
+            'vdata': vdata,
+            'has_applied': has_applied
+        })
+    
+    except Vacancy.DoesNotExist:
+        messages.error(request, 'Job vacancy not found')
+        return redirect('apctcategory')
+    
 def applyaction(request):
     """Handle job application submission."""
     if 'log_id' not in request.session:
@@ -922,18 +926,17 @@ def applyaction(request):
             applicant = Applicant.objects.get(log_id=log_id)
             vacancy = Vacancy.objects.get(id=vacancy_id)
             
-            # Check if already applied by checking appliedpost field
-            if applicant.appliedpost and str(vacancy_id) in applicant.appliedpost:
-                messages.warning(request, f'You have already applied for {vacancy.vacancyname}')
-            else:
-                # Append to appliedpost field (comma-separated IDs)
-                if applicant.appliedpost:
-                    applicant.appliedpost += f",{vacancy_id}"
-                else:
-                    applicant.appliedpost = str(vacancy_id)
-                
-                applicant.save()
+            # Check if already applied using Application model
+            application, created = Application.objects.get_or_create(
+                applicant=applicant,
+                vacancy=vacancy,
+                defaults={'status': 'APPLIED'}
+            )
+            
+            if created:
                 messages.success(request, f'Successfully applied for {vacancy.vacancyname}!')
+            else:
+                messages.warning(request, f'You have already applied for {vacancy.vacancyname}')
         
         except Applicant.DoesNotExist:
             messages.error(request, 'Applicant not found')

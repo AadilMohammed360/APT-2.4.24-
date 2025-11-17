@@ -1,34 +1,94 @@
 {% extends "applicant/apctlayout.html" %}
+
 {% load static %}
 
 {% block content %}
+
 <div class="container-xxl py-5">
     <div class="container">
         <div class="row g-5">
             <div class="col-lg-12">
-                <h1 class="mb-3">{{ vdata.vacancyname }}</h1>
-                <p class="mb-4"><i class="fa fa-building text-primary me-2"></i><strong>Company:</strong> {{ vdata.company }}</p>
-                <p class="mb-4"><i class="fa fa-money text-primary me-2"></i><strong>Salary:</strong> {{ vdata.salary }}</p>
-                <p class="mb-4"><i class="fa fa-users text-primary me-2"></i><strong>Seats Available:</strong> {{ vdata.seats }}</p>
-                
-                <hr class="my-4">
-                
-                <!-- RENDER ALL CONTENT -->
-                <div class="job-content">
-                    {{ vdata.content|safe }}
+                <!-- Job Details Card -->
+                <div class="job-item p-5 mb-4">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1 class="mb-4">{{ vdata.vacancyname }}</h1>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="badge bg-primary fs-5">
+                                <i class="fas fa-chair me-2"></i>{{ vdata.seats }} Positions
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <hr class="mb-4">
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong><i class="fa fa-building text-primary me-2"></i>Company:</strong> 
+                                {{ vdata.company }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <strong><i class="far fa-money-bill-alt text-primary me-2"></i>Salary:</strong> 
+                                {{ vdata.salary }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Job Description -->
+                    {% if vdata.content %}
+                    <div class="mb-4">
+                        <div class="p-3 bg-light rounded">
+                            {{ vdata.content|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Requirements -->
+                    {% if vdata.requirements %}
+                    <div class="mb-4">
+                        <h4 class="mb-3"><i class="fas fa-list-check text-primary me-2"></i>Requirements</h4>
+                        <div class="p-3 bg-light rounded">
+                            {{ vdata.requirements|safe }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Apply Form -->
+                    <div class="mt-5 p-4 bg-light rounded text-center">
+                        {% if has_applied %}
+                            <button class="btn btn-secondary btn-lg" disabled>
+                                <i class="fas fa-check-circle me-2"></i>Already Applied
+                            </button>
+                            <p class="mt-2 text-muted">You have already applied for this position</p>
+                        {% else %}
+                            <form method="POST" action="{% url 'applyaction' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="vacancy_id" value="{{ vdata.id }}">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Apply for this Position
+                                </button>
+                            </form>
+                            <p class="mt-2 text-muted">Click to submit your application</p>
+                        {% endif %}
+                    </div>
                 </div>
                 
-                <hr class="my-4">
-                
-                <form method="POST" action="{% url 'applyaction' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="vacancy_id" value="{{ vdata.id }}">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fa fa-paper-plane me-2"></i>Apply Now
-                    </button>
-                </form>
+                <!-- Navigation Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'apctcategory' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Job List
+                    </a>
+                    <a href="{% url 'apctnotifications' %}" class="btn btn-info">
+                        <i class="fas fa-bell me-2"></i>My Applications
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 {% endblock %}
