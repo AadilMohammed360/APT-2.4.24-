@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Description - Recruitment Management System</title>
+  <style>
+    :root {
+      --bg: #0f1116;
+      --panel: #141823;
+      --text: #ffffff;
+      --muted: #c8cbd6;
+      --accent: #7c3aed;
+      --accent-ghost: #a78bfa;
+      --divider: #252a38;
+      --shadow: 0 12px 30px rgba(0,0,0,0.45);
+      --radius-md: 12px;
+      --gap-xl: 28px;
+      --gap-md: 16px;
+      --gap-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .slide {
+      height: 100vh;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(124,58,237,0.08), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 20%, rgba(167,139,250,0.08), transparent 55%),
+                  var(--bg);
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-ghost);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap-xl);
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .card p {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: var(--gap-sm);
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--accent-ghost);
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="header">
+      <div class="eyebrow">Module Description</div>
+      <h1 class="title">Recruitment Management System</h1>
+    </div>
+
+    <div class="grid">
+      <!-- Admin Module -->
+      <div class="card">
+        <h3>Site Administrator Module</h3>
+        <p>
+          The site administrator module provides limited backend access to manage public-facing content and recruiter accounts. Administrators can add or remove recruiter profiles and maintain static pages such as the contact page, testimonials, and abou
+        </p>
+      </div>
+
+      <!-- Recruiters Module -->
+      <div class="card">
+        <h3>Recruiters Module</h3>
+        <p>
+          Recruiters are equipped with tools to manage job postings and interact with applicants. They can create and edit job vacancies, set job descriptions, view and filter applicant resumes, schedule interviews, and communicate directly with candidat
+        </p>
+      </div>
+
+      <!-- Applicants Module -->
+      <div class="card">
+        <h3>Applicants Module</h3>
+        <p>
+          Applicants use a dedicated portal to search and apply for job listings. They can create detailed profiles, upload resumes, and track the progress of their applications. The module also allows users to manage personal settings, update passwords,
+        </p>
+      </div>
+
+      <!-- Integration -->
+      <div class="card">
+        <h3>Integration Capabilities</h3>
+        <p>
+          All modules are seamlessly integrated to ensure smooth data flow and consistent user experience. Role-based access controls protect sensitive information while enabling efficient collaboration between applicants and recruiters. Public content m
+        </p>
+        <div class="note"><strong>Note:</strong> Administrator access is limited to recruiter management and static page content only.</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

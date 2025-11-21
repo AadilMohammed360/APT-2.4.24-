@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Functionality - Recruitment Management System</title>
+  <style>
+    :root {
+      --bg: #0f1116;
+      --panel: #141823;
+      --text: #ffffff;
+      --muted: #c8cbd6;
+      --accent: #7c3aed;
+      --accent-ghost: #a78bfa;
+      --divider: #252a38;
+      --shadow: 0 12px 30px rgba(0,0,0,0.45);
+      --radius-md: 12px;
+      --gap-xl: 28px;
+      --gap-md: 16px;
+      --gap-sm: 10px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: var(--bg);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .slide {
+      height: 100vh;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(124,58,237,0.08), transparent 60%),
+                  radial-gradient(1000px 700px at 90% 20%, rgba(167,139,250,0.08), transparent 55%),
+                  var(--bg);
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-ghost);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap-xl);
+    }
+
+    @media (max-width: 1000px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--divider);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .card ul {
+      padding-left: 20px;
+      margin: 0;
+      color: #e0e2ec;
+      font-size: 14px;
+    }
+
+    .card ul li {
+      margin-bottom: 6px;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--accent-ghost);
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="header">
+      <div class="eyebrow">Module Functionality</div>
+      <h1 class="title">Recruitment Management System</h1>
+    </div>
+
+    <div class="grid">
+      <!-- Applicant Functions -->
+      <div class="card">
+        <h3>Applicant-scoped Functions</h3>
+        <ul>
+          <li>View settings</li>
+          <li>Upload resume</li>
+          <li>Receive notifications</li>
+          <li>Update settings</li>
+          <li>Search job listings</li>
+          <li>View Testimonials</li>
+          <li>View About Page</li>
+          <li>Update profile/password</li>
+          <li>View job listings</li>
+          <li>Apply for vacancy</li>
+        </ul>
+      </div>
+
+      <!-- Recruiter Functions -->
+      <div class="card">
+        <h3>Recruiter-scoped Functions</h3>
+        <ul>
+          <li>Set job vacancies</li>
+          <li>View applicants</li>
+          <li>View account settings</li>
+          <li>Edit job vacancies</li>
+          <li>View resume of applicant</li>
+          <li>Change account settings</li>
+          <li>Set job description</li>
+          <li>Hire applicants</li>
+          <li>Update profile/password</li>
+          <li>Register account</li>
+          <li>Filter resumes by type</li>
+        </ul>
+      </div>
+
+      <!-- Admin Functions -->
+      <div class="card">
+        <h3>Admin-scoped Functions</h3>
+        <ul>
+          <li>Add Recruiters</li>
+          <li>Remove Recruiters</li>
+          <li>Create contact pages</li>
+          <li>Set about pages</li>
+          <li>Change password</li>
+          <li>View Recruiter List</li>
+        </ul>
+        <div class="note"><strong>Note:</strong> Admin cannot enable or disable recruiter accounts.</div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
