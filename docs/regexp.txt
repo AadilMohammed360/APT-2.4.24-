@@ -1,0 +1,6 @@
+        if (!validateInput('apctname', /^[a-zA-Z ]+$/, 'Name is required', 'Invalid name format')) return;
+        if (!validateInput('email', /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 'Email is required', 'Invalid email format')) return;
+        if (!validateInput('contact', /^[6-9][0-9]{9}$/, 'Contact number is required', 'Invalid contact number format')) return;
+        if (!validateInput('address', /.+/, 'This field is mandatory', '')) return;
+        if (!validateInput('username', /.+/, 'Username is mandatory', '')) return;
+        if (!validateInput('password', /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]).{8,}$/ , 'Password cannot be empty','Password must contain at least 8 characters, including uppercase, lowercase, digit, and special character', '')) return;
