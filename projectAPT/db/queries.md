@@ -175,3 +175,5 @@ INSERT INTO baseapp_application (applicant_id, vacancy_id, status, applied_date,
 (22, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
 (23, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL),
 (24, 1, 'NOT_APPLIED', NOW(), NOW(), NULL, NULL);
+
+UPDATE `baseapp_application` SET `status`='APPLIED' WHERE `status`='NOT_APPLIED';
