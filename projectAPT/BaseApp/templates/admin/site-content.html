@@ -1,0 +1,354 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Content Management</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+    <a href="index.html" class="navbar-brand d-flex align-items-center text-center py-0 px-4 px-lg-5">
+        <h1 class="m-0 text-primary">Applicant Tracking</h1>
+    </a>
+    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto p-4 p-lg-0">
+            <a href="{% url 'adminwelcome' %}" class="nav-item nav-link">Home</a>
+            <a href="{% url 'adminaddstaff' %}" class="nav-item nav-link">Add Staff</a>
+            <a href="{% url 'admin_site_content' %}" class="nav-item nav-link active">Site Content</a>
+        </div>
+        <div class="nav-item dropdown">
+            <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                <i class="fas fa-cog fs-5 me-3"></i>
+            </a>
+            <div class="dropdown-menu rounded-0 m-0">
+                <a href="{% url 'adminpasswordupdate' %}" class="dropdown-item">Change Account Password</a>
+                <a href="{% url 'index' %}" class="dropdown-item">Logout &nbsp;&nbsp; <i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+        <a href="{% url 'adminwelcome' %}" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block">Admin Panel</a>
+    </div>
+</nav>
+<!-- Navbar End -->    
+
+<div class="container py-5">
+    <h1 class="mb-4">
+        <i class="fa fa-cogs text-primary me-3"></i>Site Content Management
+    </h1>
+    
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Form -->
+    <form method="POST" action="{% url 'admin_site_content' %}" id="siteContentForm">
+        {% csrf_token %}
+        
+        <!-- Contact Info -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fa fa-envelope me-2"></i>Contact Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Contact Email -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Contact Email <span class="text-danger">*</span></label>
+                        <input type="email" 
+                               class="form-control" 
+                               id="contact_email"
+                               name="contact_email" 
+                               value="{{ content.contact_email }}"
+                               placeholder="contact@example.com"
+                               aria-describedby="contact_email-error">
+                        <div id="contact_email-error"></div>
+                    </div>
+                    
+                    <!-- Contact Phone -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Contact Phone</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="contact_phone"
+                               name="contact_phone" 
+                               value="{{ content.contact_phone|default:'' }}"
+                               placeholder="+91 9876543210"
+                               aria-describedby="contact_phone-error">
+                        <div id="contact_phone-error"></div>
+                        <small class="text-muted">Optional - Indian format (10 digits)</small>
+                    </div>
+                    
+                    <!-- Support Phone -->
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold">Support Phone</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="support_phone"
+                               name="support_phone" 
+                               value="{{ content.support_phone|default:'' }}"
+                               placeholder="+91 1234567890"
+                               aria-describedby="support_phone-error">
+                        <div id="support_phone-error"></div>
+                        <small class="text-muted">Optional - Indian format (10 digits)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- About Page -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fa fa-book me-2"></i>About Page Content</h5>
+            </div>
+            <div class="card-body">
+                <!-- About Title -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">About Title <span class="text-danger">*</span></label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="about_title"
+                           name="about_title" 
+                           value="{{ content.about_title }}"
+                           placeholder="e.g., About Us"
+                           aria-describedby="about_title-error">
+                    <div id="about_title-error"></div>
+                </div>
+                
+                <!-- About Content -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">About Content <span class="text-danger">*</span></label>
+                    <textarea id="about_content" 
+                              name="about_content"
+                              aria-describedby="about_content-error">{{ content.about_content|default:'' }}</textarea>
+                    <div id="about_content-error"></div>
+                    <small class="text-muted">
+                        <i class="fa fa-info-circle me-1"></i>
+                        Use the rich text editor to format your about page content
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fa fa-copyright me-2"></i>Footer</h5>
+            </div>
+            <div class="card-body">
+                <label class="form-label fw-bold">Footer Text <span class="text-danger">*</span></label>
+                <input type="text" 
+                       class="form-control" 
+                       id="footer_text"
+                       name="footer_text" 
+                       value="{{ content.footer_text }}"
+                       placeholder="© 2025 Job Portal. All rights reserved."
+                       aria-describedby="footer_text-error">
+                <div id="footer_text-error"></div>
+            </div>
+        </div>
+        
+        <!-- Buttons -->
+        <button type="button" class="btn btn-primary btn-lg" onclick="validateSiteContent()">
+            <i class="fa fa-save me-2"></i>Save Changes
+        </button>
+        <a href="{% url 'adminwelcome' %}" class="btn btn-secondary btn-lg ms-3">
+            <i class="fa fa-arrow-left me-2"></i>Back
+        </a>
+    </form>
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+<script>
+// Initialize Summernote
+$(document).ready(function() {
+    $('#about_content').summernote({
+        placeholder: 'Write your about page content here...',
+        height: 400,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'italic']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['fullscreen', 'codeview']]
+        ]
+    });
+});
+
+// ==================== VALIDATION HELPER FUNCTIONS ====================
+
+function showError(input, errorId, message) {
+    document.getElementById(errorId).innerHTML = message;
+    document.getElementById(errorId).className = 'invalid-feedback';
+    input.className = "form-control is-invalid";
+    input.focus();
+}
+
+function resetError(input, errorId) {
+    document.getElementById(errorId).innerHTML = 'Looks Good';
+    document.getElementById(errorId).className = 'valid-feedback';
+    input.className = "form-control is-valid";
+}
+
+function validateInput(inputFieldName, pattern, requiredErrorMsg, invalidErrorMsg, isOptional = false) {
+    var form = document.getElementById('siteContentForm');
+    var input = form.querySelector('[name="' + inputFieldName + '"]');
+    
+    // If field is optional and empty, mark as valid
+    if (isOptional && input.value.trim() === '') {
+        resetError(input, inputFieldName + '-error');
+        return true;
+    }
+    
+    // Required field validation
+    if (!isOptional && input.value.trim() === '') {
+        showError(input, inputFieldName + '-error', requiredErrorMsg);
+        return false;
+    }
+    
+    // Pattern validation (only if value exists)
+    if (input.value.trim() !== '' && pattern && !pattern.test(input.value)) {
+        showError(input, inputFieldName + '-error', invalidErrorMsg);
+        return false;
+    }
+    
+    resetError(input, inputFieldName + '-error');
+    return true;
+}
+
+// Special validation for Summernote content
+function validateSummernote(fieldName, requiredErrorMsg) {
+    var content = $('#' + fieldName).summernote('code');
+    var textContent = $('<div>').html(content).text().trim(); // Strip HTML tags
+    
+    var errorDiv = document.getElementById(fieldName + '-error');
+    
+    if (textContent === '') {
+        errorDiv.innerHTML = requiredErrorMsg;
+        errorDiv.className = 'invalid-feedback d-block';
+        $('#' + fieldName).next('.note-editor').addClass('border-danger');
+        return false;
+    } else {
+        errorDiv.innerHTML = 'Looks Good';
+        errorDiv.className = 'valid-feedback d-block';
+        $('#' + fieldName).next('.note-editor').removeClass('border-danger');
+        return true;
+    }
+}
+
+// ==================== MAIN VALIDATION FUNCTION ====================
+
+function validateSiteContent() {
+    // Validate contact email (required)
+    if (!validateInput('contact_email', 
+                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, 
+                       'Contact email is required', 
+                       'Invalid email format')) return;
+    
+    // Validate contact phone (optional, but if provided must be valid Indian number)
+    if (!validateInput('contact_phone', 
+                       /^[6-9][0-9]{9}$/, 
+                       '', 
+                       'Invalid phone number (must be 10 digits starting with 6-9)', 
+                       true)) return;
+    
+    // Validate support phone (optional, but if provided must be valid Indian number)
+    if (!validateInput('support_phone', 
+                       /^[6-9][0-9]{9}$/, 
+                       '', 
+                       'Invalid phone number (must be 10 digits starting with 6-9)', 
+                       true)) return;
+    
+    // Validate about title (required)
+    if (!validateInput('about_title', 
+                       /^.{3,}$/, 
+                       'About title is required', 
+                       'About title must be at least 3 characters')) return;
+    
+    // Validate about content (Summernote - required)
+    if (!validateSummernote('about_content', 'About content is required')) return;
+    
+    // Validate footer text (required)
+    if (!validateInput('footer_text', 
+                       /^.{5,}$/, 
+                       'Footer text is required', 
+                       'Footer text must be at least 5 characters')) return;
+    
+    // If all validations pass, submit the form
+    var form = document.getElementById('siteContentForm');
+    form.submit();
+}
+</script>
+
+<style>
+/* Validation styling */
+.valid-feedback, .invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+}
+
+.valid-feedback {
+    color: #198754;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+}
+
+.note-editor.border-danger {
+    border: 2px solid #dc3545 !important;
+}
+
+/* Card styling */
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+</body>
+</html>

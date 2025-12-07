@@ -35,17 +35,16 @@
                         <td>{{ vacancy.company }}</td>
                         <td>{{ vacancy.salary }}</td>
                         <td>
-<button class="btn btn-warning btn-sm me-1" 
-        data-id="{{ vacancy.id }}"
-        data-name="{{ vacancy.vacancyname }}"
-        data-seats="{{ vacancy.seats }}"
-        data-company="{{ vacancy.company }}"
-        data-salary="{{ vacancy.salary }}"
-        data-content="{{ vacancy.content|escape }}"
-        onclick="editVacancyBtn(this)">
-    <i class="fa fa-edit"></i>
-</button>
-
+                            <button class="btn btn-warning btn-sm me-1" 
+                                    data-id="{{ vacancy.id }}"
+                                    data-name="{{ vacancy.vacancyname }}"
+                                    data-seats="{{ vacancy.seats }}"
+                                    data-company="{{ vacancy.company }}"
+                                    data-salary="{{ vacancy.salary }}"
+                                    data-content="{{ vacancy.content|escape }}"
+                                    onclick="editVacancyBtn(this)">
+                                <i class="fa fa-edit"></i>
+                            </button>
                             <a href="{% url 'removevacancy' %}?delid={{ vacancy.id }}" 
                                class="btn btn-danger btn-sm"
                                onclick="return confirm('Remove?')">
@@ -68,42 +67,87 @@
 <div class="modal fade" id="addModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form method="POST" action="{% url 'registervacancy' %}" onsubmit="return submitAdd()">
-                {% csrf_token %}
-                <div class="modal-header">
-                    <h5 class="modal-title">Add Vacancy</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label>Vacancy Name</label>
-                        <input type="text" class="form-control" name="vacancyname" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Seats</label>
-                            <input type="number" class="form-control" name="seat" required>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fa fa-plus-circle me-2"></i>Add New Vacancy
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Vacancy Modal Form -->
+                <form method="POST" action="{% url 'registervacancy' %}" id="vacancyform">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3">
+                        <!-- Vacancy Name -->
+                        <div class="col-md-6">
+                            <label for="vacancyname" class="form-label fw-bold">Vacancy Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="vacancyname" 
+                                   name="vacancyname" 
+                                   placeholder="e.g., Senior Software Developer"
+                                   aria-describedby="vacancyname-error">
+                            <div id="vacancyname-error"></div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Company</label>
-                            <input type="text" class="form-control" name="company" required>
+
+                        <!-- Company -->
+                        <div class="col-md-6">
+                            <label for="company" class="form-label fw-bold">Company Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="company" 
+                                   name="company" 
+                                   placeholder="e.g., Google Inc"
+                                   aria-describedby="company-error">
+                            <div id="company-error"></div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Salary</label>
-                            <input type="text" class="form-control" name="salary" required>
+
+                        <!-- Salary -->
+                        <div class="col-md-6">
+                            <label for="salary" class="form-label fw-bold">Salary Range</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="salary" 
+                                   name="salary" 
+                                   placeholder="e.g., 50000-70000 or 5-7 LPA"
+                                   aria-describedby="salary-error">
+                            <div id="salary-error"></div>
+                        </div>
+
+                        <!-- Seats -->
+                        <div class="col-md-6">
+                            <label for="seats" class="form-label fw-bold">Number of Seats</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="seats" 
+                                   name="seats" 
+                                   placeholder="e.g., 5"
+                                   aria-describedby="seats-error"
+                                   min="1">
+                            <div id="seats-error"></div>
+                        </div>
+
+                        <!-- Job Content (Summernote) -->
+                        <div class="col-12">
+                            <label for="content" class="form-label fw-bold">Job Description</label>
+                            <textarea id="content" 
+                                      name="content" 
+                                      class="form-control"
+                                      aria-describedby="content-error"></textarea>
+                            <div id="content-error"></div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Job Details Content</label>
-                        <div id="summernote_add"></div>
-                        <textarea name="content" id="content_add" style="display:none;"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-times me-2"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="validateVacancy()">
+                    <i class="fa fa-save me-2"></i>Add Vacancy
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -112,43 +156,90 @@
 <div class="modal fade" id="updateModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form method="POST" action="{% url 'updatevacancy' %}" onsubmit="return submitUpdate()">
-                {% csrf_token %}
-                <input type="hidden" name="recordid" id="update_id">
-                <div class="modal-header">
-                    <h5 class="modal-title">Update Vacancy</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label>Vacancy Name</label>
-                        <input type="text" class="form-control" name="newvacancyname" id="update_name" required>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label>Seats</label>
-                            <input type="number" class="form-control" name="newseat" id="update_seats" required>
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title">
+                    <i class="fa fa-edit me-2"></i>Update Vacancy
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Update Vacancy Modal Form -->
+                <form method="POST" action="{% url 'updatevacancy' %}" id="updatevacancyform">
+                    {% csrf_token %}
+                    
+                    <!-- Hidden ID -->
+                    <input type="hidden" id="update_vacancy_id" name="vacancy_id">
+                    
+                    <div class="row g-3">
+                        <!-- Vacancy Name -->
+                        <div class="col-md-6">
+                            <label for="update_vacancyname" class="form-label fw-bold">Vacancy Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="update_vacancyname" 
+                                   name="vacancyname" 
+                                   placeholder="e.g., Senior Software Developer"
+                                   aria-describedby="update_vacancyname-error">
+                            <div id="update_vacancyname-error"></div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Company</label>
-                            <input type="text" class="form-control" name="newcompany" id="update_company" required>
+
+                        <!-- Company -->
+                        <div class="col-md-6">
+                            <label for="update_company" class="form-label fw-bold">Company Name</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="update_company" 
+                                   name="company" 
+                                   placeholder="e.g., Google Inc"
+                                   aria-describedby="update_company-error">
+                            <div id="update_company-error"></div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label>Salary</label>
-                            <input type="text" class="form-control" name="newsalary" id="update_salary" required>
+
+                        <!-- Salary -->
+                        <div class="col-md-6">
+                            <label for="update_salary" class="form-label fw-bold">Salary Range</label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="update_salary" 
+                                   name="salary" 
+                                   placeholder="e.g., 50000-70000 or 5-7 LPA"
+                                   aria-describedby="update_salary-error">
+                            <div id="update_salary-error"></div>
+                        </div>
+
+                        <!-- Seats -->
+                        <div class="col-md-6">
+                            <label for="update_seats" class="form-label fw-bold">Number of Seats</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="update_seats" 
+                                   name="seats" 
+                                   placeholder="e.g., 5"
+                                   aria-describedby="update_seats-error"
+                                   min="1">
+                            <div id="update_seats-error"></div>
+                        </div>
+
+                        <!-- Job Content (Summernote) -->
+                        <div class="col-12">
+                            <label for="update_content" class="form-label fw-bold">Job Description</label>
+                            <textarea id="update_content" 
+                                      name="content" 
+                                      class="form-control"
+                                      aria-describedby="update_content-error"></textarea>
+                            <div id="update_content-error"></div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label>Job Details Content</label>
-                        <div id="summernote_update"></div>
-                        <textarea name="newcontent" id="content_update" style="display:none;"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-times me-2"></i>Cancel
+                </button>
+                <button type="button" class="btn btn-warning" onclick="validateUpdateVacancy()">
+                    <i class="fa fa-save me-2"></i>Update Vacancy
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -163,90 +254,251 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
 
 <script>
+// Initialize Summernote for Add Modal
+$(document).ready(function() {
+    $('#content').summernote({
+        placeholder: 'Enter job description, requirements, and qualifications...',
+        height: 250,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'italic']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['codeview']]
+        ]
+    });
+    
+    // Initialize Summernote for Update Modal
+    $('#update_content').summernote({
+        placeholder: 'Enter job description, requirements, and qualifications...',
+        height: 250,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'italic']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['insert', ['link']],
+            ['view', ['codeview']]
+        ]
+    });
+});
+
+// ==================== MODAL FUNCTIONS ====================
+
 function openAddModal() {
+    // Clear form
+    document.getElementById('vacancyform').reset();
+    $('#content').summernote('code', ''); // Clear Summernote
+    
+    // Clear all validation states
+    clearValidation('vacancyform');
+    
+    // Open modal
     var modal = new bootstrap.Modal(document.getElementById('addModal'));
     modal.show();
-    
-    setTimeout(function() {
-        $('#summernote_add').summernote({
-            placeholder: 'Enter job details here...',
-            tabsize: 2,
-            height: 400,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-    }, 300);
 }
 
-function editVacancyBtn(btn) {
-    var id = btn.getAttribute('data-id');
-    var name = btn.getAttribute('data-name');
-    var seats = btn.getAttribute('data-seats');
-    var company = btn.getAttribute('data-company');
-    var salary = btn.getAttribute('data-salary');
-    var content = btn.getAttribute('data-content');
+function editVacancyBtn(button) {
+    // Get data from button attributes
+    var id = button.getAttribute('data-id');
+    var name = button.getAttribute('data-name');
+    var seats = button.getAttribute('data-seats');
+    var company = button.getAttribute('data-company');
+    var salary = button.getAttribute('data-salary');
+    var content = button.getAttribute('data-content');
     
-    document.getElementById('update_id').value = id;
-    document.getElementById('update_name').value = name;
+    // Populate form fields
+    document.getElementById('update_vacancy_id').value = id;
+    document.getElementById('update_vacancyname').value = name;
     document.getElementById('update_seats').value = seats;
     document.getElementById('update_company').value = company;
     document.getElementById('update_salary').value = salary;
     
+    // Set Summernote content
+    $('#update_content').summernote('code', content);
+    
+    // Clear validation states
+    clearValidation('updatevacancyform');
+    
+    // Open modal
     var modal = new bootstrap.Modal(document.getElementById('updateModal'));
     modal.show();
+}
+
+function clearValidation(formId) {
+    var form = document.getElementById(formId);
+    var inputs = form.querySelectorAll('.form-control');
+    inputs.forEach(function(input) {
+        input.className = 'form-control';
+    });
     
-    setTimeout(function() {
-        $('#summernote_update').summernote({
-            tabsize: 2,
-            height: 400,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['fontsize', ['fontsize']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
-        
-        // Decode HTML entities and set content
-        var textarea = document.createElement('textarea');
-        textarea.innerHTML = content;
-        var decodedContent = textarea.value;
-        
-        $('#summernote_update').summernote('code', decodedContent || '');
-    }, 300);
+    var errors = form.querySelectorAll('[id$="-error"]');
+    errors.forEach(function(error) {
+        error.innerHTML = '';
+        error.className = '';
+    });
 }
 
-function submitAdd() {
-    var content = $('#summernote_add').summernote('code');
-    document.getElementById('content_add').value = content;
-    return true;
+// ==================== VALIDATION HELPER FUNCTIONS ====================
+
+function showError(input, errorId, message) {
+    document.getElementById(errorId).innerHTML = message;
+    document.getElementById(errorId).className = 'invalid-feedback';
+    input.className = "form-control is-invalid";
+    input.focus();
 }
 
-function submitUpdate() {
-    var content = $('#summernote_update').summernote('code');
-    document.getElementById('content_update').value = content;
-    return true;
+function resetError(input, errorId) {
+    document.getElementById(errorId).innerHTML = 'Looks Good';
+    document.getElementById(errorId).className = 'valid-feedback';
+    input.className = "form-control is-valid";
 }
 
-// Cleanup on modal close
-$('#addModal').on('hidden.bs.modal', function () {
-    $('#summernote_add').summernote('destroy');
-});
+function validateInput(inputFieldName, pattern, requiredErrorMsg, invalidErrorMsg, formId) {
+    var form = document.getElementById(formId);
+    var input = form.querySelector('[name="' + inputFieldName + '"]');
+    
+    if (input.value.trim() === '') {
+        showError(input, inputFieldName + '-error', requiredErrorMsg);
+        return false;
+    } else if (pattern && !pattern.test(input.value)) {
+        showError(input, inputFieldName + '-error', invalidErrorMsg);
+        return false;
+    } else {
+        resetError(input, inputFieldName + '-error');
+        return true;
+    }
+}
 
-$('#updateModal').on('hidden.bs.modal', function () {
-    $('#summernote_update').summernote('destroy');
-});
+// Special validation for Summernote content
+function validateSummernote(fieldName, requiredErrorMsg) {
+    var content = $('#' + fieldName).summernote('code');
+    var textContent = $('<div>').html(content).text().trim(); // Strip HTML tags
+    
+    var errorDiv = document.getElementById(fieldName + '-error');
+    
+    if (textContent === '') {
+        errorDiv.innerHTML = requiredErrorMsg;
+        errorDiv.className = 'invalid-feedback d-block';
+        $('#' + fieldName).next('.note-editor').addClass('border-danger');
+        return false;
+    } else {
+        errorDiv.innerHTML = 'Looks Good';
+        errorDiv.className = 'valid-feedback d-block';
+        $('#' + fieldName).next('.note-editor').removeClass('border-danger');
+        return true;
+    }
+}
+
+// ==================== ADD VACANCY VALIDATION ====================
+
+function validateVacancy() {
+    // Validate vacancy name (alphanumeric with spaces, hyphens, slashes)
+    if (!validateInput('vacancyname', /^[a-zA-Z0-9 \-\/]+$/, 'Vacancy name is required', 'Invalid vacancy name format', 'vacancyform')) return;
+    
+    // Validate company (letters and spaces only)
+    if (!validateInput('company', /^[a-zA-Z ]+$/, 'Company name is required', 'Invalid company name (only letters allowed)', 'vacancyform')) return;
+    
+    // Validate salary (alphanumeric with spaces, hyphens, commas)
+    if (!validateInput('salary', /^[a-zA-Z0-9 \-,]+$/, 'Salary range is required', 'Invalid salary format', 'vacancyform')) return;
+    
+    // Validate seats (positive integer)
+    if (!validateInput('seats', /^[1-9][0-9]*$/, 'Number of seats is required', 'Seats must be a positive number', 'vacancyform')) return;
+    
+    // Validate job content (Summernote)
+    if (!validateSummernote('content', 'Job description is required')) return;
+    
+    // If all validations pass, submit the form
+    var form = document.getElementById('vacancyform');
+    form.submit();
+}
+
+// ==================== UPDATE VACANCY VALIDATION ====================
+
+function validateUpdateVacancy() {
+    // Validate vacancy name
+    var form = document.getElementById('updatevacancyform');
+    var vacancyInput = form.querySelector('[name="vacancyname"]');
+    
+    if (vacancyInput.value.trim() === '') {
+        showError(vacancyInput, 'update_vacancyname-error', 'Vacancy name is required');
+        return false;
+    } else if (!/^[a-zA-Z0-9 \-\/]+$/.test(vacancyInput.value)) {
+        showError(vacancyInput, 'update_vacancyname-error', 'Invalid vacancy name format');
+        return false;
+    } else {
+        resetError(vacancyInput, 'update_vacancyname-error');
+    }
+    
+    // Validate company
+    var companyInput = form.querySelector('[name="company"]');
+    if (companyInput.value.trim() === '') {
+        showError(companyInput, 'update_company-error', 'Company name is required');
+        return false;
+    } else if (!/^[a-zA-Z ]+$/.test(companyInput.value)) {
+        showError(companyInput, 'update_company-error', 'Invalid company name (only letters allowed)');
+        return false;
+    } else {
+        resetError(companyInput, 'update_company-error');
+    }
+    
+    // Validate salary
+    var salaryInput = form.querySelector('[name="salary"]');
+    if (salaryInput.value.trim() === '') {
+        showError(salaryInput, 'update_salary-error', 'Salary range is required');
+        return false;
+    } else if (!/^[a-zA-Z0-9 \-,]+$/.test(salaryInput.value)) {
+        showError(salaryInput, 'update_salary-error', 'Invalid salary format');
+        return false;
+    } else {
+        resetError(salaryInput, 'update_salary-error');
+    }
+    
+    // Validate seats
+    var seatsInput = form.querySelector('[name="seats"]');
+    if (seatsInput.value.trim() === '') {
+        showError(seatsInput, 'update_seats-error', 'Number of seats is required');
+        return false;
+    } else if (!/^[1-9][0-9]*$/.test(seatsInput.value)) {
+        showError(seatsInput, 'update_seats-error', 'Seats must be a positive number');
+        return false;
+    } else {
+        resetError(seatsInput, 'update_seats-error');
+    }
+    
+    // Validate job content (Summernote)
+    if (!validateSummernote('update_content', 'Job description is required')) return;
+    
+    // If all validations pass, submit the form
+    form.submit();
+}
 </script>
+
+<style>
+/* Validation styling */
+.valid-feedback, .invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.invalid-feedback {
+    color: #dc3545;
+}
+
+.valid-feedback {
+    color: #198754;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #198754;
+}
+
+.note-editor.border-danger {
+    border: 2px solid #dc3545 !important;
+}
+</style>
 {% endblock %}

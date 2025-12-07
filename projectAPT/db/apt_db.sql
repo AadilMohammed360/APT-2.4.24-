@@ -2,10 +2,17 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
+<<<<<<< Updated upstream
 -- Host: 127.0.0.1:3307
 -- Generation Time: Dec 02, 2025 at 06:22 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
+=======
+-- Host: 127.0.0.1
+-- Generation Time: Dec 07, 2025 at 08:12 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
+>>>>>>> Stashed changes
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -105,7 +112,15 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (41, 'Can add application', 11, 'add_application'),
 (42, 'Can change application', 11, 'change_application'),
 (43, 'Can delete application', 11, 'delete_application'),
+<<<<<<< Updated upstream
 (44, 'Can view application', 11, 'view_application');
+=======
+(44, 'Can view application', 11, 'view_application'),
+(45, 'Can add Site Content', 12, 'add_sitecontent'),
+(46, 'Can change Site Content', 12, 'change_sitecontent'),
+(47, 'Can delete Site Content', 12, 'delete_sitecontent'),
+(48, 'Can view Site Content', 12, 'view_sitecontent');
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -198,7 +213,12 @@ INSERT INTO `baseapp_applicant` (`id`, `applicantname`, `email`, `contact`, `add
 (21, 'apct au', 'apctau@gmail.com', 9567302940, 'asd', 'apct au', 'M.Sc', NULL, 'cv_base/tg16.pdf', 22),
 (22, 'apct av', 'apctav@gmail.com', 9567302940, 'asd', 'apct av', 'BSc', NULL, 'cv_base/ui.pdf', 23),
 (23, 'apct aw', 'apctaw@gmail.com', 9567302940, 'asd', 'apct aw', 'BSc', NULL, 'cv_base/xc.pdf', 24),
+<<<<<<< Updated upstream
 (24, 'apct ax', 'apctax@gmail.com', 9567302940, 'asd', 'apct ax', 'BSc', NULL, 'cv_base/yu.pdf', 25);
+=======
+(24, 'apct ax', 'apctax@gmail.com', 9567302940, 'asd', 'apct ax', 'BSc', NULL, 'cv_base/yu.pdf', 25),
+(25, 'apct baz', 'apctbaz@gmail.com', 9567302940, 'random address', 'apct baz', 'M.Tech', '3', 'cv_base/df.pdf', 28);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -222,6 +242,7 @@ CREATE TABLE `baseapp_application` (
 --
 
 INSERT INTO `baseapp_application` (`id`, `applied_date`, `status`, `status_updated_date`, `notes`, `ml_score`, `applicant_id`, `vacancy_id`) VALUES
+<<<<<<< Updated upstream
 (1, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 1, 1),
 (2, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 2, 1),
 (3, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 3, 1),
@@ -246,6 +267,33 @@ INSERT INTO `baseapp_application` (`id`, `applied_date`, `status`, `status_updat
 (22, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 22, 1),
 (23, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 23, 1),
 (24, '2025-12-02 10:50:45.000000', 'APPLIED', '2025-12-02 10:50:45.000000', NULL, NULL, 24, 1);
+=======
+(1, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 1, 1),
+(2, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 2, 1),
+(3, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 3, 1),
+(5, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 5, 1),
+(6, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 6, 1),
+(7, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 7, 1),
+(8, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 8, 1),
+(9, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 9, 1),
+(10, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 10, 1),
+(11, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 11, 1),
+(12, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 12, 1),
+(13, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 13, 1),
+(14, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 14, 1),
+(15, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 15, 1),
+(16, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 16, 1),
+(17, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 17, 1),
+(18, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 18, 1),
+(19, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 19, 1),
+(20, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 20, 1),
+(21, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 21, 1),
+(22, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 22, 1),
+(23, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 23, 1),
+(24, '2025-11-16 19:00:24.000000', 'APPLIED', '2025-11-16 19:00:24.000000', NULL, NULL, 24, 1),
+(25, '2025-11-16 13:55:42.349960', 'APPLIED', '2025-11-16 13:55:42.349960', NULL, NULL, 4, 2),
+(26, '2025-11-17 11:02:06.571932', 'APPLIED', '2025-11-17 11:02:06.571932', NULL, NULL, 25, 1);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -291,7 +339,35 @@ INSERT INTO `baseapp_login` (`id`, `role`, `username`, `email`, `password`) VALU
 (23, 'applicant', 'apct av', 'apctav@gmail.com', 'Aa.12345'),
 (24, 'applicant', 'apct aw', 'apctaw@gmail.com', 'Aa.12345'),
 (25, 'applicant', 'apct ax', 'apctax@gmail.com', 'Aa.12345'),
+<<<<<<< Updated upstream
 (26, 'staff', 'staff ab', 'staffab@gmail.com', 'Aa.12345');
+=======
+(28, 'applicant', 'apct baz', 'apctbaz@gmail.com', 'Aa.12345'),
+(29, 'staff', 'staff baz', 'staffbaz@gmail.com', 'Aa.12345');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `baseapp_sitecontent`
+--
+
+CREATE TABLE `baseapp_sitecontent` (
+  `id` bigint(20) NOT NULL,
+  `contact_email` varchar(254) NOT NULL,
+  `contact_phone` varchar(20) DEFAULT NULL,
+  `about_title` varchar(200) NOT NULL,
+  `about_content` longtext DEFAULT NULL,
+  `footer_text` varchar(500) NOT NULL,
+  `support_phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `baseapp_sitecontent`
+--
+
+INSERT INTO `baseapp_sitecontent` (`id`, `contact_email`, `contact_phone`, `about_title`, `about_content`, `footer_text`, `support_phone`) VALUES
+(1, 'contact@jobportal.com', '9567302940', 'About Us', '<p>about us is about us with more about</p>', '© 2025 Job Portal. All rights reserved.', '9567302940');
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -314,7 +390,11 @@ CREATE TABLE `baseapp_staff` (
 --
 
 INSERT INTO `baseapp_staff` (`id`, `staffname`, `email`, `contact`, `workplace`, `username`, `log_id_id`) VALUES
+<<<<<<< Updated upstream
 (1, 'staff ab', 'staffab@gmail.com', 9567302940, 'dummy', 'staff ab', 26);
+=======
+(2, 'staff baz', 'staffbaz@gmail.com', 9567302940, 'JKL Co', 'staff baz', 29);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -336,14 +416,23 @@ CREATE TABLE `baseapp_vacancy` (
 --
 
 INSERT INTO `baseapp_vacancy` (`id`, `vacancyname`, `salary`, `company`, `content`, `seats`) VALUES
+<<<<<<< Updated upstream
 (1, 'Software Engineer', '$250k', 'ABC Corporation', '<h2>Job Description</h2>\r\n<p>We are seeking a talented Software Engineer to join our dynamic team. You will be responsible for designing, developing, and maintaining software applications that meet our clients\' needs.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>B.Tech in Computer Science or related field</li>\r\n<li>M.Tech preferred</li>\r\n<li>Strong programming skills in Java, Python, or C++</li>\r\n<li>Experience with Agile development methodologies</li>\r\n</ul>', 3),
+=======
+(1, 'Software Engineer', '$250k', 'ABC Corporation', '<h2>Job Description</h2>\r\n<p>We are seeking a talented Software Engineer to join our dynamic team. You will be responsible for designing, developing, and maintaining software applications that meet our clients\' needs.</p>\r\n<h2>Qualification</h2>\r\n<ul>\r\n<li>B.Tech in Computer Science or related field</li>\r\n<li>M.Tech preferred</li>\r\n<li>Strong programming skills in Java, Python, or C++</li>\r\n<li>Experience with Agile development methodologies</li>\r\n</ul>', 3),
+>>>>>>> Stashed changes
 (2, 'Data Scientist', '$280k', 'XYZ Technologies', '<h2>Job Description</h2>\r\n<p>Join our data analytics team to transform raw data into actionable insights. You will work with large datasets, build predictive models, and present findings to stakeholders.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>BSc or MSc in Statistics, Mathematics, or Computer Science</li>\r\n<li>MCA degree holders welcome</li>\r\n<li>Proficiency in Python, R, and SQL</li>\r\n<li>Experience with machine learning frameworks</li>\r\n</ul>', 4),
 (3, 'Web Developer', '$300k', 'PQR Solutions', '<h2>Job Description</h2>\r\n<p>We need a skilled Web Developer to create responsive and user-friendly websites. You will work on both frontend and backend development, ensuring seamless user experiences.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>BCA, MCA, or B.Tech in Computer Science</li>\r\n<li>Strong knowledge of HTML, CSS, JavaScript</li>\r\n<li>Experience with React, Angular, or Vue.js</li>\r\n<li>Understanding of backend technologies (Node.js, Django, Flask)</li>\r\n</ul>', 8),
 (4, 'Database Administrator', '$280k', 'GHI Enterprises', '<h2>Job Description</h2>\r\n<p>Maintain and optimize our database systems to ensure high performance, security, and availability. You will handle database backups, recovery, and performance tuning.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>MCA, BCA, or B.Tech degree</li>\r\n<li>Strong knowledge of MySQL, PostgreSQL, or Oracle</li>\r\n<li>Experience with database optimization techniques</li>\r\n<li>Understanding of database security principles</li>\r\n</ul>', 5),
 (5, 'Network Engineer', '$290k', 'JKL Technologies', '<h2>Job Description</h2>\r\n<p>Design, implement, and maintain our network infrastructure. You will troubleshoot network issues, configure routers and switches, and ensure network security.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>B.Tech or M.Sc in Computer Networks or related field</li>\r\n<li>CCNA or CCNP certification preferred</li>\r\n<li>Experience with Cisco, Juniper networking equipment</li>\r\n<li>Knowledge of firewall configuration and VPN setup</li>\r\n</ul>', 9),
 (6, 'Research Analyst', '$250k', 'MNO Corporation', '<h2>Job Description</h2>\r\n<p>Conduct research and analysis on market trends, competitor activities, and industry developments. Prepare detailed reports and presentations for management.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>BSc, MSc, or M.A in relevant field</li>\r\n<li>Strong analytical and critical thinking skills</li>\r\n<li>Excellent written and verbal communication</li>\r\n<li>Proficiency in MS Excel and data analysis tools</li>\r\n</ul>', 90),
 (7, 'HR Manager', '$220k', 'LMN Solutions', '<h2>Job Description</h2>\r\n<p>Lead our human resources department, managing recruitment, employee relations, performance management, and HR policy implementation.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>MBA or MHRM degree required</li>\r\n<li>5+ years of HR management experience</li>\r\n<li>Strong knowledge of labor laws and HR best practices</li>\r\n<li>Excellent interpersonal and leadership skills</li>\r\n</ul>', 2),
+<<<<<<< Updated upstream
 (8, 'QA Tester', '$200k', 'DEF Innovations', '<h2>Job Description</h2>\r\n<p>Ensure software quality through comprehensive testing. You will create test plans, execute test cases, identify bugs, and work with developers to resolve issues.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>BCA or MCA degree</li>\r\n<li>Experience with manual and automated testing</li>\r\n<li>Knowledge of testing tools (Selenium, JUnit, TestNG)</li>\r\n<li>Strong attention to detail and analytical skills</li>\r\n</ul>', 6);
+=======
+(8, 'QA Tester', '$200k', 'DEF Innovations', '<h2>Job Description</h2>\r\n<p>Ensure software quality through comprehensive testing. You will create test plans, execute test cases, identify bugs, and work with developers to resolve issues.</p>\r\n<h2>Qualifications</h2>\r\n<ul>\r\n<li>BCA or MCA degree</li>\r\n<li>Experience with manual and automated testing</li>\r\n<li>Knowledge of testing tools (Selenium, JUnit, TestNG)</li>\r\n<li>Strong attention to detail and analytical skills</li>\r\n</ul>', 6),
+(9, 'Digital Marketer', '450k', 'JKL Co', '<p>some shit more</p>', 4);
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -386,6 +475,10 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (9, 'BaseApp', 'applicant'),
 (11, 'BaseApp', 'application'),
 (7, 'BaseApp', 'login'),
+<<<<<<< Updated upstream
+=======
+(12, 'BaseApp', 'sitecontent'),
+>>>>>>> Stashed changes
 (10, 'BaseApp', 'staff'),
 (8, 'BaseApp', 'vacancy'),
 (5, 'contenttypes', 'contenttype'),
@@ -409,6 +502,7 @@ CREATE TABLE `django_migrations` (
 --
 
 INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
+<<<<<<< Updated upstream
 (1, 'BaseApp', '0001_initial', '2025-12-02 05:18:52.438073'),
 (2, 'BaseApp', '0002_alter_vacancy_desc_alter_vacancy_qualification', '2025-12-02 05:18:52.469341'),
 (3, 'BaseApp', '0003_rename_desc_vacancy_content_and_more', '2025-12-02 05:18:52.691015'),
@@ -430,6 +524,31 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (19, 'auth', '0011_update_proxy_permissions', '2025-12-02 05:19:04.857620'),
 (20, 'auth', '0012_alter_user_first_name_max_length', '2025-12-02 05:19:04.935405'),
 (21, 'sessions', '0001_initial', '2025-12-02 05:19:05.290537');
+=======
+(1, 'BaseApp', '0001_initial', '2025-11-16 13:28:19.251813'),
+(2, 'BaseApp', '0002_alter_vacancy_desc_alter_vacancy_qualification', '2025-11-16 13:28:19.255821'),
+(3, 'BaseApp', '0003_rename_desc_vacancy_content_and_more', '2025-11-16 13:28:19.265558'),
+(4, 'contenttypes', '0001_initial', '2025-11-16 13:28:19.282224'),
+(5, 'auth', '0001_initial', '2025-11-16 13:28:19.471782'),
+(6, 'admin', '0001_initial', '2025-11-16 13:28:19.525167'),
+(7, 'admin', '0002_logentry_remove_auto_add', '2025-11-16 13:28:19.530175'),
+(8, 'admin', '0003_logentry_add_action_flag_choices', '2025-11-16 13:28:19.535169'),
+(9, 'contenttypes', '0002_remove_content_type_name', '2025-11-16 13:28:19.564299'),
+(10, 'auth', '0002_alter_permission_name_max_length', '2025-11-16 13:28:19.587315'),
+(11, 'auth', '0003_alter_user_email_max_length', '2025-11-16 13:28:19.595313'),
+(12, 'auth', '0004_alter_user_username_opts', '2025-11-16 13:28:19.601314'),
+(13, 'auth', '0005_alter_user_last_login_null', '2025-11-16 13:28:19.619529'),
+(14, 'auth', '0006_require_contenttypes_0002', '2025-11-16 13:28:19.620939'),
+(15, 'auth', '0007_alter_validators_add_error_messages', '2025-11-16 13:28:19.626268'),
+(16, 'auth', '0008_alter_user_username_max_length', '2025-11-16 13:28:19.634261'),
+(17, 'auth', '0009_alter_user_last_name_max_length', '2025-11-16 13:28:19.642291'),
+(18, 'auth', '0010_alter_group_name_max_length', '2025-11-16 13:28:19.651306'),
+(19, 'auth', '0011_update_proxy_permissions', '2025-11-16 13:28:19.659292'),
+(20, 'auth', '0012_alter_user_first_name_max_length', '2025-11-16 13:28:19.666893'),
+(21, 'sessions', '0001_initial', '2025-11-16 13:28:19.680898'),
+(22, 'BaseApp', '0004_sitecontent', '2025-12-06 19:16:26.147879'),
+(23, 'BaseApp', '0005_remove_sitecontent_contact_address_and_more', '2025-12-06 21:17:31.064300');
+>>>>>>> Stashed changes
 
 -- --------------------------------------------------------
 
@@ -448,7 +567,13 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
+<<<<<<< Updated upstream
 ('iel1v8dp7joj55a3yae34yz5zw56yt31', 'eyJsb2dfaWQiOjI2fQ:1vQIpR:fNTRzPSRJKnOz1X_XgrC_DhGm3cW4drpzrKX5J2z0vE', '2025-12-16 05:21:33.772799');
+=======
+('2ir1s1ko7vkbjeju7k4wqeinty7vioxw', 'eyJsb2dfaWQiOjI5fQ:1vKxKN:g5rdW5A5IMg4C3xWx0uhBxcC6TWa8mpzUAAkUsa4aCA', '2025-12-01 11:23:23.266562'),
+('5rorv7s6du3ak1pmguustentf8gi576c', 'eyJsb2dfaWQiOjV9:1vS0a9:Sse5nzgHuvfkWHg3siFWNAVmUV3_HabhuUdb2Ai2i1Q', '2025-12-20 22:16:49.273460'),
+('k8owckh7x381ptayx39cimuzoch0nv8p', 'eyJsb2dfaWQiOjV9:1vPlkV:s967r1BSUt94VCMr26i1PB8tMwuYSIPprVJGNPa4qS8', '2025-12-14 18:02:15.714504');
+>>>>>>> Stashed changes
 
 --
 -- Indexes for dumped tables
@@ -521,6 +646,12 @@ ALTER TABLE `baseapp_login`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `baseapp_sitecontent`
+--
+ALTER TABLE `baseapp_sitecontent`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `baseapp_staff`
 --
 ALTER TABLE `baseapp_staff`
@@ -581,7 +712,11 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
+<<<<<<< Updated upstream
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+=======
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `auth_user`
@@ -605,31 +740,57 @@ ALTER TABLE `auth_user_user_permissions`
 -- AUTO_INCREMENT for table `baseapp_applicant`
 --
 ALTER TABLE `baseapp_applicant`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `baseapp_application`
 --
 ALTER TABLE `baseapp_application`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `baseapp_login`
 --
 ALTER TABLE `baseapp_login`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `baseapp_sitecontent`
+--
+ALTER TABLE `baseapp_sitecontent`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `baseapp_staff`
 --
 ALTER TABLE `baseapp_staff`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `baseapp_vacancy`
 --
 ALTER TABLE `baseapp_vacancy`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `django_admin_log`
@@ -641,13 +802,21 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
+<<<<<<< Updated upstream
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+=======
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+>>>>>>> Stashed changes
 
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
+<<<<<<< Updated upstream
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+=======
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+>>>>>>> Stashed changes
 
 --
 -- Constraints for dumped tables

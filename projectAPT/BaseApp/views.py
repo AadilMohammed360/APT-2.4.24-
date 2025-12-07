@@ -129,17 +129,17 @@ def uploadCV(request):
 def registervacancy(request):
     if request.method == 'POST':
         vacancyname = request.POST.get('vacancyname')
-        seat = request.POST.get('seat')
+        seats = request.POST.get('seats')  # Changed from 'seat' to 'seats'
         company = request.POST.get('company')
         salary = request.POST.get('salary')
-        content = request.POST.get('content')  # Changed from desc and qualification
+        content = request.POST.get('content')
         
         vacancy = Vacancy(
             vacancyname=vacancyname,
-            seats=seat,
+            seats=seats,  # Changed from seat to seats
             company=company,
             salary=salary,
-            content=content  # Single field
+            content=content
         )
         vacancy.save()
         
@@ -148,16 +148,17 @@ def registervacancy(request):
     
     return redirect('staffvacancies')
 
+
 def updatevacancy(request):
     if request.method == 'POST':
-        recordid = request.POST.get('recordid')
+        recordid = request.POST.get('vacancy_id')  # Changed from 'recordid' to 'vacancy_id'
         vacancy = Vacancy.objects.get(id=recordid)
         
-        vacancy.vacancyname = request.POST.get('newvacancyname')
-        vacancy.seats = request.POST.get('newseat')
-        vacancy.company = request.POST.get('newcompany')
-        vacancy.salary = request.POST.get('newsalary')
-        vacancy.content = request.POST.get('newcontent')  # Single field
+        vacancy.vacancyname = request.POST.get('vacancyname')  # Changed from 'newvacancyname'
+        vacancy.seats = request.POST.get('seats')  # Changed from 'newseat'
+        vacancy.company = request.POST.get('company')  # Changed from 'newcompany'
+        vacancy.salary = request.POST.get('salary')  # Changed from 'newsalary'
+        vacancy.content = request.POST.get('content')  # Changed from 'newcontent'
         
         vacancy.save()
         
@@ -165,6 +166,7 @@ def updatevacancy(request):
         return redirect('staffvacancies')
     
     return redirect('staffvacancies')
+
   
 
 
@@ -202,6 +204,34 @@ def adminwelcome(request):
 def adminaddstaff(request):
     staffdata = Staff.objects.all()
     return render(request,'admin/addstaff.html',{'staffdata':staffdata})
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import SiteContent
+
+def admin_site_content(request):
+    """Manage site content"""
+    if 'log_id' not in request.session:
+        messages.error(request, 'Please login as admin')
+        return redirect('login')
+    
+    # Get or create site content
+    content = SiteContent.get_content()
+    
+    if request.method == 'POST':
+        # Update content
+        content.contact_email = request.POST.get('contact_email', content.contact_email)
+        content.contact_phone = request.POST.get('contact_phone', '')
+        content.support_phone = request.POST.get('support_phone', '')
+        content.about_title = request.POST.get('about_title', content.about_title)
+        content.about_content = request.POST.get('about_content', '')
+        content.footer_text = request.POST.get('footer_text', content.footer_text)
+        
+        content.save()
+        messages.success(request, 'Site content updated successfully!')
+        return redirect('admin_site_content')
+    
+    return render(request, 'admin/site-content.html', {'content': content})
 
 
 def adminpasswordupdate(request):

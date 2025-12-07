@@ -74,3 +74,35 @@ class Application(models.Model):
     
     def __str__(self):
         return f"{self.applicant.applicantname} - {self.vacancy.vacancyname} - {self.status}"
+    
+
+# Add this to your existing models.py
+
+class SiteContent(models.Model):
+    """Manage essential site content - single instance only"""
+    
+    # Contact Information
+    contact_email = models.EmailField(default="contact@jobportal.com")
+    contact_phone = models.CharField(max_length=20, blank=True, null=True)
+    support_phone = models.CharField(max_length=20, blank=True, null=True)
+    
+    # About Page Content (HTML content from Summernote)
+    about_title = models.CharField(max_length=200, default="About Us")
+    about_content = models.TextField(blank=True, null=True)
+    
+    # Footer Content
+    footer_text = models.CharField(max_length=500, default="© 2025 Job Portal. All rights reserved.")
+    
+    class Meta:
+        verbose_name = "Site Content"
+        verbose_name_plural = "Site Content"
+    
+    def __str__(self):
+        return "Site Content"
+    
+    @classmethod
+    def get_content(cls):
+        """Get or create the single site content instance"""
+        content, created = cls.objects.get_or_create(pk=1)
+        return content
+    

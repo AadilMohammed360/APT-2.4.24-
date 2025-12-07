@@ -68,6 +68,7 @@ urlpatterns = [
     path('apct/removeapct', views.removeapct, name="removeapct"),
     path('staff/removevacancy', views.removevacancy, name="removevacancy"),
     path('administrator/passwordupdate', views.adminpasswordupdate, name="adminpasswordupdate"),
+    path('administrator/sitecontent/', views.admin_site_content, name='admin_site_content'),
 
 
     #  applicant_registration
