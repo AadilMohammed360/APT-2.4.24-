@@ -443,7 +443,6 @@ def accountlogin(request):
 
     
     
-# new views from claude
 # from django.shortcuts import render
 # from .models import Applicant, Application, Vacancy
 
@@ -805,11 +804,11 @@ def staffviewapplicants(request):
         'vacancy'
     ).order_by('-applied_date')
     
-    vacancies = Vacancy.objects.all()  # ADD THIS LINE
+    vacancies = Vacancy.objects.all()
     
     context = {
         'applications': applications,
-        'vacancies': vacancies,  # ADD THIS LINE
+        'vacancies': vacancies,
     }
     
     return render(request, 'staff/view-applicants.html', context)
